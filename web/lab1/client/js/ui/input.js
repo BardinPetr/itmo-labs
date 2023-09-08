@@ -5,13 +5,16 @@ export const renderLabel = (forId, text) =>
 
 export const renderText = (id) => $("<span/>", { id });
 
-export function renderInput(id, type, onUpdate) {
-  const field = $(`<input/>`, { id, type });
-  const callback = () => onUpdate && onUpdate(field.val(), field);
-  field.keyup(callback);
-  field.change(callback);
-  return field;
-}
+export const renderInput = (id, type, onUpdate) =>
+  $(`<input/>`, {
+    id,
+    type,
+    on: {
+      keyup: function () {
+        onUpdate && onUpdate($(this).val());
+      },
+    },
+  });
 
 export const renderTextInput = (id, onUpdate) =>
   renderInput(id, "text", onUpdate);
@@ -21,9 +24,10 @@ export const renderOption = (label, value) =>
 
 export function renderSelect(id, options, onUpdate) {
   const select = $("<select/>", { id });
+  select.append(renderOption("", ""));
   options.forEach(({ label, value }) =>
     select.append(renderOption(label, value))
   );
-  select.change(() => onUpdate && onUpdate(select.val(), select));
+  select.on("change", () => onUpdate && onUpdate(select.val()));
   return select;
 }
