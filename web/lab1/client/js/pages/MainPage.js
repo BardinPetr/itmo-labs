@@ -1,43 +1,53 @@
 import { renderButton } from "../ui/button.js";
-import { renderLabel, renderSelect, renderTextInput } from "../ui/input.js";
+import {
+  renderLabel,
+  renderTextInput,
+  renderSelect,
+  renderText,
+} from "../ui/input.js";
 import { renderTable } from "../ui/table.js";
 import * as C from "../utils/constants.js";
 import { range } from "../utils/math.js";
 import { id } from "../utils/utils.js";
+import FloatValidator from "../api/FloatValidator.js";
 
 function render() {
-  const xSelect = renderSelect(
+  const xInput = renderSelect(
     "x-select",
     range(C.xInputMinValue, C.xInputMaxValue, C.xInputStep).map((i) => ({
       label: i,
       value: i,
     }))
   );
-  const xSelectLabel = renderLabel(id(xSelect), "Select X coordinate");
 
-  const [yInput, yInputValue] = renderTextInput("y-input", console.warn);
-  const yInputLabel = renderLabel(id(yInput), "Enter Y coordinate");
-
-  const rSelect = renderSelect(
+  const rInput = renderSelect(
     "r-select",
     range(C.rInputMinValue, C.rInputMaxValue, C.rInputStep).map((i) => ({
       label: i,
       value: i,
     }))
   );
-  const rSelectLabel = renderLabel(id(xSelect), "Select R value");
+
+  const yInput = renderTextInput("y-input");
+  const yInputMessage = renderText("error-msg-y");
+  const yValidator = new FloatValidator(yInput, yInputMessage);
+  yInput.keyup(() => yValidator.update(yInput.val()));
+
+  const xInputLabel = renderLabel(id(xInput), "Select X coordinate");
+  const yInputLabel = renderLabel(id(yInput), "Enter Y coordinate");
+  const rInputLabel = renderLabel(id(rInput), "Select R value");
 
   const sendBtn = renderButton("send-btn", "Check", () =>
-    console.error(xInputValue(), yInputValue(), rInputValue())
+    console.error(xInput.val(), yInput.val(), rInput.val())
   );
 
-  const table = $("#table-input");
-  renderTable(table, [
-    [xSelectLabel, xSelect],
-    [yInputLabel, yInput],
-    [rSelectLabel, rSelect],
+  const table = [
+    [xInputLabel, xInput],
+    [yInputLabel, yInput, yInputMessage],
+    [rInputLabel, rInput],
     [sendBtn],
-  ]);
+  ];
+  renderTable($("#table-input"), table);
 }
 
 render();
