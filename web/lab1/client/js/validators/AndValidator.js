@@ -7,13 +7,11 @@ class AndValidator extends Validator {
     super(messageField);
     this.#validators = validators;
     this.#validators.forEach((val) =>
-      val.onChanged(() => {
-        this.update(this.validators);
-      })
+      val.onChanged(() => this.update(this.#validators))
     );
   }
 
-  #checkValue(validators) {
+  _checkValue(validators) {
     if (!validators.every((i) => i.valid))
       return {
         valid: false,
@@ -26,7 +24,7 @@ class AndValidator extends Validator {
     };
   }
 
-  #postprocessValue(validators) {
+  _postprocessValue(validators) {
     return validators.map((i) => i.value);
   }
 }

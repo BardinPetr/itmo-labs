@@ -18,7 +18,7 @@ class Validator {
   /*
   Validates value and provides error text for showing to user
   */
-  #checkValue(value) {
+  _checkValue(value) {
     if (!value)
       return {
         valid: false,
@@ -33,7 +33,7 @@ class Validator {
   /*
   Function applied to value in cases when it is considered valid before returing it to user
   */
-  #postprocessValue(value) {
+  _postprocessValue(value) {
     return value;
   }
 
@@ -49,12 +49,12 @@ class Validator {
   }
 
   update(value) {
-    const { valid, message } = this.#checkValue(value);
+    const { valid, message } = this._checkValue(value);
     this.valid = valid;
 
     if (valid) {
       this.#hideMessage();
-      this.value = this.#postprocessValue(value);
+      this.value = this._postprocessValue(value);
     } else {
       this.#showMessage(message);
       this.value = null;

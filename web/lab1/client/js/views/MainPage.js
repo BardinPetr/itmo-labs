@@ -8,13 +8,11 @@ import {
 import { renderTable } from "../ui/table/table.js";
 import * as C from "../utils/constants.js";
 import { id, range } from "../utils/utils.js";
-import FloatValidator from "../validators/FloatValidator.js";
-import AndValidator from "../validators/AndValidator.js";
 import FigureDisplay from "../views/FigureDisplay.js";
-import PointResultStorage from "../data/storage.js";
+import PointResultStorage from "../data/PointResultStorage.js";
 import { checkPointRequest } from "../utils/api.js";
 import ResultsTable from "./ResultsTable.js";
-import { ROW_LOCATIONS } from "../ui/table/TableController.js";
+import { FloatValidator, AndValidator } from "../validators/index.js";
 
 class MainPage {
   #store = new PointResultStorage();
@@ -32,7 +30,7 @@ class MainPage {
       targetDimension: [8, 8],
     });
 
-    this.#resultsTable = new ResultsTable("table-result");
+    this.#resultsTable = new ResultsTable("table-result", this.#store);
 
     this.render();
   }
@@ -55,8 +53,6 @@ class MainPage {
     console.log(`(${x}, ${y}) -> ${result.result}`);
 
     this.#store.add(result);
-
-    this.#resultsTable.insertDataRow(result, ROW_LOCATIONS.TOP);
   }
 
   #changeR(newR) {
@@ -117,11 +113,16 @@ class MainPage {
       sendBtn.prop("disabled", !valid);
     });
 
+    const clearBtn = renderButton("clear-btn", "Clear", () =>
+      this.#store.clear()
+    );
+
     const table = [
       [xInputLabel, xInput, xInputMessage],
       [yInputLabel, yInput, yInputMessage],
       [rInputLabel, rInput, rInputMessage],
       [sendBtn, allInputMessage],
+      [clearBtn],
     ];
     renderTable($("#table-input"), table);
   }
