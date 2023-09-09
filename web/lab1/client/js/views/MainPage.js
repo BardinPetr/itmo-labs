@@ -63,7 +63,7 @@ class MainPage {
 
   render() {
     // TODO remove
-    this.#changeR(1);
+    // this.#changeR(1);
 
     const xInputMessage = renderText("error-msg-x");
     const xValidator = new FloatValidator(xInputMessage);

@@ -27,8 +27,14 @@ class FigureDisplay extends PlotDisplay {
     this.#preloadData();
   }
 
-  addPoint({ x, y, result }) {
-    this.drawCircle([x, y], 0.1, result ? "#00FF00" : "#FF0000");
+  addPoint({ x, y, r, result }) {
+    const color =
+      r !== this._storedDrawParams.R
+        ? "#AAAAAADD"
+        : result
+        ? "#00FF00"
+        : "#FF0000";
+    this.drawCircle([x, y], 0.1, color);
   }
 
   #drawFigure(R) {
