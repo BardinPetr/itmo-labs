@@ -1,8 +1,18 @@
 import PlotDisplay from "../ui/plot/PlotDisplay.js";
 
 class FigureDisplay extends PlotDisplay {
-  constructor(canvas, onClick) {
+  #datastore;
+
+  constructor(canvas, datastore, onClick) {
     super(canvas, onClick);
+
+    datastore.on("clear", () => this.redraw());
+    datastore.on("insert", (data) => this.addPoint(data));
+    this.#datastore = datastore;
+  }
+
+  #preloadData() {
+    this.#datastore.get().forEach((data) => this.addPoint(data));
   }
 
   setup(params) {
@@ -12,34 +22,41 @@ class FigureDisplay extends PlotDisplay {
   redraw(params) {
     super.redraw(params);
 
-    const { R } = params;
+    const { R } = this._storedDrawParams;
     this.#drawFigure(R);
+    this.#preloadData();
+  }
+
+  addPoint({ x, y, result }) {
+    this.drawCircle([x, y], 0.1, result ? "#00FF00" : "#FF0000");
   }
 
   #drawFigure(R) {
-    if (!R) return;
+    this._env((c) => {
+      if (!R) return;
 
-    const line = (x, y) => this._ctx.lineTo(...this._toCanvas([x, y]));
+      const line = (x, y) => c.lineTo(...this._toCanvas([x, y]));
 
-    this._ctx.beginPath();
-    this._ctx.moveTo(...this._toCanvas([0, 0]));
-    line(R, 0);
-    line(0, -R / 2);
-    line(0, -R);
-    line(-R / 2, -R);
-    line(-R / 2, 0);
-    line(-R, 0);
-    this._ctx.arc(
-      ...this._toCanvas([0, 0]),
-      R * this._ratio,
-      -Math.PI / 2,
-      Math.PI,
-      true
-    );
-    line(0, R);
-    this._ctx.closePath();
-    this._ctx.fillStyle = "#DD00AAA0";
-    this._ctx.fill();
+      c.beginPath();
+      c.moveTo(...this._toCanvas([0, 0]));
+      line(R, 0);
+      line(0, -R / 2);
+      line(0, -R);
+      line(-R / 2, -R);
+      line(-R / 2, 0);
+      line(-R, 0);
+      c.arc(
+        ...this._toCanvas([0, 0]),
+        R * this._ratio,
+        -Math.PI / 2,
+        Math.PI,
+        true
+      );
+      line(0, R);
+      c.closePath();
+      c.fillStyle = "#DD00AAA0";
+      c.fill();
+    });
   }
 }
 

@@ -10,29 +10,29 @@ class TableController {
 
   constructor(tableId, header) {
     this._baseId = tableId;
-    this._table = $(`#${tableId}`);
+    this.table = $(`#${tableId}`);
     this._header = header;
 
     this._renderHeader();
   }
 
   _findHeaderRow() {
-    return this._table.find(`.${TableController.HEADER_ROW_CLASS}`);
+    return this.table.find(`.${TableController.HEADER_ROW_CLASS}`);
   }
 
   _insert(row, location = ROW_LOCATIONS.TOP) {
     if (location == ROW_LOCATIONS.BOTTOM) {
-      this._table.append(row);
+      this.table.append(row);
       return;
     }
 
     const header = this._findHeaderRow();
     if (header.length) header.after(row);
-    else this._table.prepend(row);
+    else this.table.prepend(row);
   }
 
   _replaceOrInsert(row, checkSelector, location = ROW_LOCATIONS.TOP) {
-    const old = this._table.find(checkSelector);
+    const old = this.table.find(checkSelector);
     if (old && old.length > 0) {
       old.after(row);
       old.remove();
@@ -83,7 +83,7 @@ class TableController {
   }
 
   clear() {
-    this._table
+    this.table
       .find(`tr:not([class*='${TableController.HEADER_ROW_CLASS}'])`)
       .remove();
   }

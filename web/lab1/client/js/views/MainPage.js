@@ -24,6 +24,7 @@ class MainPage {
   constructor() {
     this.#plot = new FigureDisplay(
       document.getElementById("plot-canvas"),
+      this.#store,
       (coord) => this.#pointSelected(coord)
     );
     this.#plot.setup({
@@ -106,8 +107,8 @@ class MainPage {
     ]);
 
     const sendBtn = renderButton("send-btn", "Check", () => {
-      const [x, y, r] = validator.value;
-      pointSelected(x, y, r);
+      const [x, y] = validator.value;
+      this.#pointSelected([x, y]);
     });
     validator.onChanged((valid) => {
       sendBtn.prop("disabled", !valid);
@@ -116,13 +117,13 @@ class MainPage {
     const clearBtn = renderButton("clear-btn", "Clear", () =>
       this.#store.clear()
     );
+    this.#resultsTable.table.before(clearBtn);
 
     const table = [
       [xInputLabel, xInput, xInputMessage],
       [yInputLabel, yInput, yInputMessage],
       [rInputLabel, rInput, rInputMessage],
       [sendBtn, allInputMessage],
-      [clearBtn],
     ];
     renderTable($("#table-input"), table);
   }

@@ -6,6 +6,7 @@ class AxesDisplay extends BaseCanvas {
   _ptsWidth = 0;
   _ptsHeight = 0;
   #targetDimension = 0;
+  _storedDrawParams = 0;
 
   constructor(canvas, onClick) {
     super(canvas, onClick);
@@ -21,7 +22,7 @@ class AxesDisplay extends BaseCanvas {
   }
 
   redraw(params) {
-    super.redraw();
+    super.redraw(params);
 
     this._ratio = Math.round(
       Math.max(this._width, this._height) / Math.max(...this.#targetDimension)
@@ -55,10 +56,16 @@ class AxesDisplay extends BaseCanvas {
     super.drawLine(this._toCanvas(from), this._toCanvas(to), width);
   }
 
+  drawCircle(center, radius, color) {
+    super.drawCircle(this._toCanvas(center), radius * this._ratio, color);
+  }
+
   drawText(pos, text, textBaseline = "middle", textAlign = "left") {
-    this._ctx.textBaseline = textBaseline;
-    this._ctx.textAlign = textAlign;
-    this._ctx.fillText(text, ...this._toCanvas(pos));
+    this._env((c) => {
+      c.textBaseline = textBaseline;
+      c.textAlign = textAlign;
+      c.fillText(text, ...this._toCanvas(pos));
+    });
   }
 
   #drawAxes(tickPeriod = 1, tickSize = 5) {

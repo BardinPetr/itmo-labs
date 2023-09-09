@@ -11,6 +11,7 @@ class ResultsTable extends TableController {
       this.insertDataRow(data, ROW_LOCATIONS.TOP)
     );
     dataStore.on("clear", () => this.clear());
+    this.insertData(dataStore.get());
   }
 
   _renderDataRowCells({ x, y, r, timestamp, result, executionTime }) {
