@@ -5,49 +5,69 @@ import {
   renderSelect,
   renderText,
 } from "../ui/input.js";
-import { renderTable } from "../ui/table.js";
+import { renderTable } from "../ui/table/table.js";
 import * as C from "../utils/constants.js";
 import { id, range } from "../utils/utils.js";
 import FloatValidator from "../validators/FloatValidator.js";
 import AndValidator from "../validators/AndValidator.js";
 import FigureDisplay from "../views/FigureDisplay.js";
 import PointResultStorage from "../data/storage.js";
-import PointResult from "../data/PointResult.js";
 import { checkPointRequest } from "../utils/api.js";
+import ResultsTable from "./ResultsTable.js";
+import { ROW_LOCATIONS } from "../ui/table/TableController.js";
 
 class MainPage {
   #store = new PointResultStorage();
-  #R = null;
+  #resultsTable;
   #plot;
+
+  #R = null;
 
   constructor() {
     this.#plot = new FigureDisplay(
-      document.getElementById("canvas"),
-      this.#pointSelected
+      document.getElementById("plot-canvas"),
+      (coord) => this.#pointSelected(coord)
     );
     this.#plot.setup({
       targetDimension: [8, 8],
     });
 
+    this.#resultsTable = new ResultsTable("table-result");
+
     this.render();
   }
 
   async #pointSelected([x, y]) {
-    if (!this.#R) return;
+    if (!this.#R) {
+      alert("Please select R first");
+      return;
+    }
 
     console.log(`Point R=${this.#R} (${x}, ${y})`);
 
-    const { err, result } = await checkPointRequest(x, y, r);
+    const { err, result } = await checkPointRequest(x, y, this.#R);
     if (err) {
+      console.error(err);
       alert(`Error occured: ${err}`);
       return;
     }
 
+    console.log(`(${x}, ${y}) -> ${result.result}`);
+
     this.#store.add(result);
-    console.log(this.#store.get());
+
+    this.#resultsTable.insertDataRow(result, ROW_LOCATIONS.TOP);
+  }
+
+  #changeR(newR) {
+    this.#R = newR;
+    this.#plot.redraw({ R: this.#R });
   }
 
   render() {
+    // TODO remove
+    this.#changeR(1);
+
     const xInputMessage = renderText("error-msg-x");
     const xValidator = new FloatValidator(xInputMessage);
     const xInput = renderSelect(
@@ -70,7 +90,7 @@ class MainPage {
       })),
       (value) => {
         rValidator.update(value);
-        if (rValidator.valid) this.#plot.redraw({ R: rValidator.value });
+        if (rValidator.valid) this.#changeR(rValidator.value);
       }
     );
     const rInputLabel = renderLabel(id(rInput), "Select R value");

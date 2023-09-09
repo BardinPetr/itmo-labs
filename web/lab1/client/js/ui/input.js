@@ -1,4 +1,4 @@
-import { renderTableRow } from "./table.js";
+import { renderTableRow } from "./table/table.js";
 
 export const renderLabel = (forId, text) =>
   $("<label/>", { id: `label-${forId}`, for: forId, text });

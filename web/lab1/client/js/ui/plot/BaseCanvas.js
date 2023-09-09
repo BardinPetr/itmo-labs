@@ -1,21 +1,14 @@
 class BaseCanvas {
-  _onClickCallback;
-  _canvas;
-  _ctx;
-
-  _enabled = false;
-
   constructor(canvas, onClick) {
     this._onClickCallback = onClick;
 
     this._canvas = $(canvas);
-    this._canvas.unbind("click").on("click", this._canvas);
+    this._canvas.unbind("click").on("click", (evt) => this._onClick(evt));
 
     this._ctx = canvas.getContext("2d");
   }
 
   _onClick({ offsetX, offsetY }) {
-    if (!this._enabled) return;
     this._onClickCallback([offsetX, offsetY]);
   }
 

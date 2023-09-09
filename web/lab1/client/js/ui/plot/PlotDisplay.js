@@ -11,8 +11,7 @@ class AxesDisplay extends BaseCanvas {
     super(canvas, onClick);
   }
 
-  #onClick({ offsetX, offsetY }) {
-    if (!this._enabled) return;
+  _onClick({ offsetX, offsetY }) {
     this._onClickCallback(this._fromCanvas([offsetX, offsetY]));
   }
 
