@@ -1,17 +1,19 @@
-import Validator from "./validator.js";
+import Validator from "./Validator.js";
 
 class AndValidator extends Validator {
+  #validators;
+
   constructor(messageField, validators) {
     super(messageField);
-    this.validators = validators;
-    this.validators.forEach((val) =>
+    this.#validators = validators;
+    this.#validators.forEach((val) =>
       val.onChanged(() => {
         this.update(this.validators);
       })
     );
   }
 
-  checkValue(validators) {
+  #checkValue(validators) {
     if (!validators.every((i) => i.valid))
       return {
         valid: false,
@@ -24,7 +26,7 @@ class AndValidator extends Validator {
     };
   }
 
-  postprocessValue(validators) {
+  #postprocessValue(validators) {
     return validators.map((i) => i.value);
   }
 }

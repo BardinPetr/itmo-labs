@@ -7,22 +7,34 @@ import {
 } from "../ui/input.js";
 import { renderTable } from "../ui/table.js";
 import * as C from "../utils/constants.js";
-import { range } from "../utils/math.js";
-import { id } from "../utils/utils.js";
-import FloatValidator from "../api/FloatValidator.js";
+import { id, range } from "../utils/utils.js";
+import FloatValidator from "../validators/FloatValidator.js";
+import AndValidator from "../validators/AndValidator.js";
 import renderPlot from "./axes.js";
-import AndValidator from "../api/AndValidator.js";
+import PointResultStorage from "../data/storage.js";
+import PointResult from "../data/PointResult.js";
+import { checkPointRequest } from "../utils/api.js";
 
-function pointSelected(x, y, r) {
+var store = new PointResultStorage();
+
+async function pointSelected(x, y, r) {
   console.log(`Point R=${r} (${x}, ${y})`);
+
+  const { err, result } = await checkPointRequest(x, y, r);
+  if (err) {
+    alert(`Error occured: ${err}`);
+    return;
+  }
+
+  console.log(result);
 }
 
-function render() {
+function main() {
   const renderAxes = (R) => {
     renderPlot(10, R, ([x, y]) => pointSelected(x, y, R));
   };
 
-  let axesCtx = renderAxes(C.rInputMinValue);
+  let axesCtx = renderAxes(1);
 
   const xInputMessage = renderText("error-msg-x");
   const xValidator = new FloatValidator(xInputMessage);
@@ -82,4 +94,4 @@ function render() {
   renderTable($("#table-input"), table);
 }
 
-$(render);
+$(main);

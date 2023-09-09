@@ -1,8 +1,8 @@
-import { isFloat } from "../utils/math.js";
-import Validator from "./validator.js";
+import { isFloat } from "../utils/utils.js";
+import Validator from "./Validator.js";
 
 class FloatValidator extends Validator {
-  checkValue(value) {
+  #checkValue(value) {
     if (!value)
       return {
         valid: false,
@@ -20,7 +20,7 @@ class FloatValidator extends Validator {
     };
   }
 
-  postprocessValue(value) {
+  #postprocessValue(value) {
     return parseFloat(value);
   }
 }

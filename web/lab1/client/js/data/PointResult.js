@@ -1,5 +1,5 @@
 class PointResult {
-  constructor(x, y, r, result, timestamp, executionTime) {
+  constructor({ x, y, r, result, timestamp, executionTime }) {
     this.x = x;
     this.y = y;
     this.r = r;
@@ -7,8 +7,6 @@ class PointResult {
     this.timestamp = timestamp;
     this.executionTime = executionTime;
   }
-
-  serialize() {
-    return JSON.stringify(this);
-  }
 }
+
+export default PointResult;

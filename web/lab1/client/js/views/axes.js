@@ -52,6 +52,8 @@ function drawAxes(
 }
 
 function drawFigure({ ctx, toCanvas, ratio }, R) {
+  if (!R) return;
+
   const line = (x, y) => ctx.lineTo(...toCanvas([x, y]));
 
   ctx.beginPath();
@@ -95,13 +97,15 @@ function renderPlot(size, R, onClick) {
   const axesCtx = prepareAxes(ctx, size);
 
   drawAxes(axesCtx);
-  drawFigure(axesCtx, R);
 
-  $(canvas)
-    .unbind("click")
-    .on("click", ({ offsetX, offsetY }) =>
-      onClick(axesCtx.fromCanvas([offsetX, offsetY]))
-    );
+  if (R) {
+    drawFigure(axesCtx, R);
+    $(canvas)
+      .unbind("click")
+      .on("click", ({ offsetX, offsetY }) =>
+        onClick(axesCtx.fromCanvas([offsetX, offsetY]))
+      );
+  }
 
   return axesCtx;
 }
