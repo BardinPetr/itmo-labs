@@ -1,3 +1,4 @@
+import "../utils/jquery.js";
 import { renderButton } from "../ui/button.js";
 import {
   renderLabel,
@@ -110,6 +111,7 @@ class MainPage {
       const [x, y] = validator.value;
       this.#pointSelected([x, y]);
     });
+
     validator.onChanged((valid) => {
       sendBtn.prop("disabled", !valid);
     });
@@ -120,13 +122,18 @@ class MainPage {
     this.#resultsTable.table.before(clearBtn);
 
     const table = [
-      [xInputLabel, xInput, xInputMessage],
-      [yInputLabel, yInput, yInputMessage],
-      [rInputLabel, rInput, rInputMessage],
+      [xInputLabel, xInput],
+      ["", xInputMessage],
+      [yInputLabel, yInput],
+      ["", yInputMessage],
+      [rInputLabel, rInput],
+      ["", rInputMessage],
       [sendBtn, allInputMessage],
     ];
     renderTable($("#table-input"), table);
   }
 }
 
-$(() => new MainPage());
+setTimeout(() => {
+  $(() => new MainPage());
+}, 5000);

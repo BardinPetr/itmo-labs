@@ -3,7 +3,7 @@ import { renderTableRow } from "./table/table.js";
 export const renderLabel = (forId, text) =>
   $("<label/>", { id: `label-${forId}`, for: forId, text });
 
-export const renderText = (id) => $("<span/>", { id });
+export const renderText = (id, params) => $("<span/>", { id, params });
 
 export const renderInput = (id, type, onUpdate) =>
   $(`<input/>`, {

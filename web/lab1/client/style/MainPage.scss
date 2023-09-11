@@ -1,0 +1,28 @@
+#plot-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+#table-input {
+  td {
+    input,
+    select {
+      width: 100%;
+    }
+
+    padding: 0;
+  }
+}
+
+#page-base {
+  height: 100%;
+  > tbody td {
+    width: 50%;
+    height: 100%;
+  }
+}
+
+span[id^="error-msg"] {
+  display: inline-block;
+  color: red;
+}

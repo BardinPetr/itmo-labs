@@ -1,0 +1,6 @@
+version: 3
+
+app:
+  image: .
+  volumes:
+  ports:

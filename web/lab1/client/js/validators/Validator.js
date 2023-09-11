@@ -40,12 +40,14 @@ class Validator {
   #showMessage(message) {
     if (!this.#messageField) return;
     this.#messageField.text(message);
-    this.#messageField.fadeIn(200);
+    // this.#messageField.fadeIn(200);
+    this.#messageField.animate({ opacity: 1 }, 200);
   }
 
   #hideMessage() {
     if (!this.#messageField) return;
-    this.#messageField.fadeOut(200);
+    // this.#messageField.fadeOut(200);
+    this.#messageField.animate({ opacity: 0 }, 200);
   }
 
   update(value) {

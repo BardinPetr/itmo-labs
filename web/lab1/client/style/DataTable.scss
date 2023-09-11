@@ -1,0 +1,24 @@
+.data-table {
+  border-collapse: collapse;
+  border-radius: 5px;
+  border-style: hidden;
+  box-shadow: 0 0 0 1px #666;
+
+  tbody {
+    width: 100%;
+  }
+
+  td {
+    text-align: center;
+    border-left: 1px solid #ccc;
+    padding: 5px;
+  }
+
+  tr:first-child td {
+    border-bottom: 2px solid #666;
+  }
+
+  tr:not(:first-child) td {
+    border-bottom: 1px solid #ccc;
+  }
+}

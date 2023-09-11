@@ -10,7 +10,7 @@ function cors(string $mode='*') {
 
 function send_response(mixed $result=null, mixed $error=null) {
   send_json([
-    "exec_time" => (microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']),
+    "executionTime" => (microtime(true) - $_SERVER['REQUEST_TIME_FLOAT']),
     "timestamp" => time(),
     "err" => $error,
     "result"=> $result

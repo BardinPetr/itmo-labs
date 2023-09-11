@@ -1,4 +1,6 @@
 class BaseCanvas {
+  #sizeUpdateHandler;
+
   constructor(canvas, onClick) {
     this._onClickCallback = onClick;
     this._storedDrawParams = null;
@@ -7,6 +9,14 @@ class BaseCanvas {
     this._canvas.unbind("click").on("click", (evt) => this._onClick(evt));
 
     this._ctx = canvas.getContext("2d");
+
+    $(window).on("resize", () => {
+      if (this.#sizeUpdateHandler) clearTimeout(this.#sizeUpdateHandler);
+      this.#sizeUpdateHandler = setTimeout(() => {
+        // console.log("1");
+        this.redraw();
+      }, 300);
+    });
   }
 
   _onClick({ offsetX, offsetY }) {
@@ -24,6 +34,8 @@ class BaseCanvas {
 
     this._width = this._canvas.width();
     this._height = this._canvas.height();
+    console.log({ width: this._width, height: this._height });
+    this._canvas.prop({ width: this._width, height: this._height });
   }
 
   _env(func) {
