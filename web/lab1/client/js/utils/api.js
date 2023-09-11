@@ -1,6 +1,6 @@
 import PointResult from "../data/PointResult.js";
 
-const BASE_URL = "http://localhost:4000/server";
+const BASE_URL = `${location.origin}`;
 
 export async function checkPointRequest(x, y, r) {
   return $.ajax({

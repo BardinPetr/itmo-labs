@@ -2,6 +2,7 @@
 include 'utils.php';
 include 'calc.php';
 
+error_reporting(E_ERROR | E_PARSE);
 cors('*');
 
 if ($_SERVER["REQUEST_METHOD"] != "GET") {
