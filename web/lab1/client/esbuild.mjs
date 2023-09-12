@@ -51,6 +51,7 @@ let ctx = await context({
 
 if (process.env.NODE_ENV === "production") {
   await ctx.rebuild();
+  await ctx.dispose();
 } else {
   try {
     await mkdir(distDir);
