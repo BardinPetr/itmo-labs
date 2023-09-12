@@ -17,12 +17,14 @@ class FigureDisplay extends PlotDisplay {
 
   setup(params) {
     super.setup(params);
+    console.warn(params);
   }
 
   redraw(params) {
     super.redraw(params);
 
     const { R } = this._storedDrawParams;
+    if (!R) return;
     this.#drawFigure(R);
     this.#preloadData();
   }

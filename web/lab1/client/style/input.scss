@@ -21,6 +21,7 @@ select,
 button {
   @include round-plate;
   @include hover-animation;
+  box-sizing: border-box;
 }
 
 button {

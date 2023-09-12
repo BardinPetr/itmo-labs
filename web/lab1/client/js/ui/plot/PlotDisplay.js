@@ -24,8 +24,9 @@ class AxesDisplay extends BaseCanvas {
   redraw(params) {
     super.redraw(params);
 
-    this._ratio = Math.round(
-      Math.max(this._width, this._height) / Math.max(...this.#targetDimension)
+    const [xDim, yDim] = this.#targetDimension;
+    this._ratio = Math.floor(
+      Math.min(this._width / (xDim + 2), this._height / (yDim + 2))
     );
 
     this._ptsWidth = Math.floor(this._width / this._ratio);
@@ -75,10 +76,10 @@ class AxesDisplay extends BaseCanvas {
     tickSize /= this._ratio;
 
     this.drawText([2 * tickSize, (this._ptsHeight / 2) * 0.95], "y");
-    this.drawText([(this._ptsWidth / 2) * 0.95, 2 * tickSize], "x");
+    this.drawText([(this._ptsWidth / 2) * 0.95, -2 * tickSize], "x");
 
     for (const i of range(
-      -this._ptsHeight / 2 + 1,
+      Math.floor(-this._ptsHeight / 2 + 1),
       this._ptsHeight / 2 - 1,
       tickPeriod
     )) {
@@ -87,7 +88,7 @@ class AxesDisplay extends BaseCanvas {
       this.drawLine([-tickSize, i], [tickSize, i], 1);
     }
     for (const i of range(
-      -this._ptsWidth / 2 + 1,
+      Math.floor(-this._ptsWidth / 2 + 1),
       this._ptsWidth / 2 - 1,
       tickPeriod
     )) {

@@ -8,7 +8,7 @@ import {
 } from "../ui/input.js";
 import { renderTable } from "../ui/table/table.js";
 import * as C from "../utils/constants.js";
-import { id, range } from "../utils/utils.js";
+import { absMax, id, range } from "../utils/utils.js";
 import FigureDisplay from "../views/FigureDisplay.js";
 import PointResultStorage from "../data/PointResultStorage.js";
 import { checkPointRequest } from "../utils/api.js";
@@ -28,9 +28,14 @@ class MainPage {
       this.#store,
       (coord) => this.#pointSelected(coord)
     );
+
     this.#plot.setup({
-      targetDimension: [8, 8],
+      targetDimension: [
+        2 * absMax(C.xInputMinValue, C.xInputMaxValue),
+        2 * absMax(C.yInputMinValue, C.yInputMaxValue),
+      ],
     });
+    this.#plot.redraw();
 
     this.#resultsTable = new ResultsTable("table-result", this.#store);
 
@@ -85,7 +90,7 @@ class MainPage {
       })),
       (value) => {
         rValidator.update(value);
-        if (rValidator.valid) this.#changeR(rValidator.value);
+        this.#changeR(rValidator.valid ? rValidator.value : null);
       }
     );
     const rInputLabel = renderLabel(id(rInput), "Select R value");
