@@ -5,8 +5,8 @@
   "author": "BardinPetr",
   "license": "MIT",
   "scripts": {
-    "build": "node esbuild.mjs",
-    "run": "node esbuild.mjs"
+    "build": "NODE_ENV=production node esbuild.mjs",
+    "start": "NODE_ENV=debug node esbuild.mjs"
   },
   "dependencies": {
     "jquery": "^3.7.1"

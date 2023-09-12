@@ -91,7 +91,11 @@ class MainPage {
     const rInputLabel = renderLabel(id(rInput), "Select R value");
 
     const yInputMessage = renderText("error-msg-y");
-    const yValidator = new FloatValidator(yInputMessage);
+    const yValidator = new FloatValidator(
+      yInputMessage,
+      C.yInputMinValue,
+      C.yInputMaxValue
+    );
     const yInput = renderTextInput("y-input", (value) =>
       yValidator.update(value)
     );
@@ -119,12 +123,12 @@ class MainPage {
     this.#resultsTable.table.before(clearBtn);
 
     const table = [
+      [rInputLabel, rInput],
+      ["", rInputMessage],
       [xInputLabel, xInput],
       ["", xInputMessage],
       [yInputLabel, yInput],
       ["", yInputMessage],
-      [rInputLabel, rInput],
-      ["", rInputMessage],
       [sendBtn, allInputMessage],
     ];
     renderTable($("#table-input"), table);
