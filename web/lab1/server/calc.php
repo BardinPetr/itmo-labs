@@ -1,5 +1,4 @@
 <?php
-
 function check_in_area(float $r, float $x, float $y) {
   if ($x >= 0) {
     if ($y >= 0) 
@@ -19,6 +18,5 @@ function check_in_area(float $r, float $x, float $y) {
 
 function check_param_range(float $r, float $x, float $y) {
   return -4 <= $x && $x <= 4 && -3 < $y && $y < 5 && 1 <= $r && $r <= 3;
-}
-
+}  
 ?>
