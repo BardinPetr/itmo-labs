@@ -1,4 +1,8 @@
+@import "theme";
+
 #plot-canvas {
+  @include round-plate;
+
   width: 100%;
   height: 50vh;
 }
