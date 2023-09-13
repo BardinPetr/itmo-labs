@@ -10,10 +10,9 @@ if ($_SERVER["REQUEST_METHOD"] != "GET") {
   send_response(error: "invalid method");
 }
 
-
 [$R, $X, $Y] = array_map(fn($name) => floatval_safe($_GET[$name]), ["r", "x", "y"]);
 
-if(in_array(null, [$R, $X, $Y], true)) {
+if(in_array(null, [$R, $X, $Y], true) || !check_param_range($R, $X, $Y)) {
   http_response_code(400);
   send_response(error: "params invalid");
 }

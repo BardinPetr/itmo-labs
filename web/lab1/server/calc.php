@@ -17,4 +17,8 @@ function check_in_area(float $r, float $x, float $y) {
   return $y >= -$r && $x >= -$r/2;
 }
 
+function check_param_range(float $r, float $x, float $y) {
+  return -4 <= $x && $x <= 4 && -3 < $y && $y < 5 && 1 <= $r && $r <= 3;
+}
+
 ?>

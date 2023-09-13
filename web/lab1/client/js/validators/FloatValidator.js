@@ -4,11 +4,13 @@ import Validator from "./Validator.js";
 class FloatValidator extends Validator {
   #maxValue;
   #minValue;
+  #inclusive;
 
-  constructor(messageField, minValue, maxValue) {
+  constructor(messageField, minValue, maxValue, inclusive) {
     super(messageField);
     this.#minValue = minValue;
     this.#maxValue = maxValue;
+    this.#inclusive = inclusive;
   }
 
   _checkValue(value) {
@@ -25,19 +27,17 @@ class FloatValidator extends Validator {
       };
 
     const val = this._postprocessValue(value);
-    if (val < this.#minValue)
-      return {
-        valid: false,
-        message: `Should not be less than ${this.#minValue}`,
-      };
-    if (val > this.#maxValue)
-      return {
-        valid: false,
-        message: `Should not be greater than ${this.#maxValue}`,
-      };
 
+    const message = `Should be in range ${this.#inclusive ? "[" : "("}${
+      this.#minValue
+    }, ${this.#maxValue}${this.#inclusive ? "]" : ")"}`;
+
+    const valid =
+      (this.#inclusive ? val <= this.#maxValue : val < this.#maxValue) &&
+      (this.#inclusive ? val >= this.#minValue : val > this.#minValue);
     return {
-      valid: true,
+      valid,
+      message: valid ? "OK" : message,
     };
   }
 

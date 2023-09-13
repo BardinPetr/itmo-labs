@@ -17,7 +17,6 @@ class FigureDisplay extends PlotDisplay {
 
   setup(params) {
     super.setup(params);
-    console.warn(params);
   }
 
   redraw(params) {

@@ -69,7 +69,12 @@ class MainPage {
 
   render() {
     const xInputMessage = renderText("error-msg-x");
-    const xValidator = new FloatValidator(xInputMessage);
+    const xValidator = new FloatValidator(
+      xInputMessage,
+      C.xInputMinValue,
+      C.xInputMaxValue,
+      true
+    );
     const xInput = renderSelect(
       "x-select",
       range(C.xInputMinValue, C.xInputMaxValue, C.xInputStep).map((i) => ({
@@ -81,7 +86,12 @@ class MainPage {
     const xInputLabel = renderLabel(id(xInput), "Select X coordinate");
 
     const rInputMessage = renderText("error-msg-r");
-    const rValidator = new FloatValidator(rInputMessage);
+    const rValidator = new FloatValidator(
+      rInputMessage,
+      C.rInputMinValue,
+      C.rInputMaxValue,
+      true
+    );
     const rInput = renderSelect(
       "r-select",
       range(C.rInputMinValue, C.rInputMaxValue, C.rInputStep).map((i) => ({
@@ -99,7 +109,8 @@ class MainPage {
     const yValidator = new FloatValidator(
       yInputMessage,
       C.yInputMinValue,
-      C.yInputMaxValue
+      C.yInputMaxValue,
+      false
     );
     const yInput = renderTextInput("y-input", (value) =>
       yValidator.update(value)
