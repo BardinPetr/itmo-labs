@@ -9,6 +9,7 @@ export const renderInput = (id, type, onUpdate) =>
   $(`<input/>`, {
     id,
     type,
+    maxlength: 10,
     on: {
       keyup: function () {
         onUpdate && onUpdate($(this).val());
