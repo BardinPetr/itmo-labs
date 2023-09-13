@@ -12,7 +12,12 @@ if ($_SERVER["REQUEST_METHOD"] != "GET") {
 
 [$R, $X, $Y] = array_map(fn($name) => floatval_safe($_GET[$name]), ["r", "x", "y"]);
 
-if(in_array(null, [$R, $X, $Y], true) || !check_param_range($R, $X, $Y)) {
+if(!check_param_range($R, $X, $Y)) {
+  http_response_code(400);
+  send_response(error: "ranges invalid");
+}
+
+if(in_array(null, [$R, $X, $Y], true)) {
   http_response_code(400);
   send_response(error: "params invalid");
 }
