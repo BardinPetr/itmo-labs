@@ -7,12 +7,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import ru.bardinpetr.itmo.lab2.auth.AuthRequestProcessor;
 import ru.bardinpetr.itmo.lab2.auth.JWTService;
-import ru.bardinpetr.itmo.lab2.auth.models.JWTTokenPairContainer;
 import ru.bardinpetr.itmo.lab2.auth.user.JWTUserInfo;
 
 import java.io.IOException;
 
-@WebServlet(name = "routerServlet", urlPatterns = {"/*"})
+@WebServlet(name = "routerServlet", urlPatterns = {"/app/*"})
 public class RouterServlet extends HttpServlet {
 
     public void init() {

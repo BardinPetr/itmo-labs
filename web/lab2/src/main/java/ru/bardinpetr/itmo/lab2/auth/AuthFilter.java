@@ -3,16 +3,12 @@ package ru.bardinpetr.itmo.lab2.auth;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.bardinpetr.itmo.lab2.auth.keys.JWTHMACKeyProvider;
-import ru.bardinpetr.itmo.lab2.auth.keys.RuntimeJWTStorage;
 
 import java.io.IOException;
 
-@WebFilter(urlPatterns = "/secure")
 public class AuthFilter extends HttpFilter {
     private JWTService jwt;
 
