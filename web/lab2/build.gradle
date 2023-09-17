@@ -1,0 +1,45 @@
+plugins {
+  id 'java'
+  id 'war'
+  id("mx.com.inftel.wildfly") version "1.0.2"
+  id("io.freefair.lombok") version "8.3"
+}
+
+group 'ru.bardinpetr.itmo'
+version '0.1.0'
+
+repositories {
+  mavenCentral()
+}
+
+ext {
+  junitVersion = '5.9.1'
+}
+
+sourceCompatibility = "16"
+targetCompatibility = "16"
+
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+}
+
+wildfly {
+  print("build/libs/${rootProject.name}-${version}.war")
+  controller = "remote+http://localhost:9990"
+  username = "admin"
+  password = "1234"
+  deployment = "build/libs/${rootProject.name}-${version}.war"
+  persistent = false
+}
+
+dependencies {
+  compileOnly('jakarta.servlet:jakarta.servlet-api:5.0.0')
+  compileOnly('jakarta.mvc:jakarta.mvc-api:2.0.0')
+  compileOnly('jakarta.json:jakarta.json-api:2.0.1')
+
+  implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+  runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+  runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+}
+
+tasks.named("build") { finalizedBy("wildflyDeploy") }
