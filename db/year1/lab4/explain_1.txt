@@ -1,0 +1,20 @@
+Nested Loop  (cost=118.00..718.16 rows=434 width=25) (actual time=0.506..0.509 rows=0 loops=1)                                              
+  Join Filter: (peop."»ƒ" = ved."◊À¬ _»ƒ")                                                                                                  
+  ->  Hash Join  (cost=117.71..192.69 rows=10 width=25) (actual time=0.377..0.491 rows=3 loops=1)                                           
+        Hash Cond: (sess."◊À¬ _»ƒ" = peop."»ƒ")                                                                                             
+        ->  Bitmap Heap Scan on "Õ_—≈——»ﬂ" sess  (cost=6.32..80.61 rows=263 width=8) (actual time=0.034..0.143 rows=261 loops=1)            
+              Recheck Cond: ("◊À¬ _»ƒ" > 126631)                                                                                            
+              Heap Blocks: exact=57                                                                                                         
+              ->  Bitmap Index Scan on "SYS_C003500_IFK"  (cost=0.00..6.25 rows=263 width=0) (actual time=0.021..0.021 rows=261 loops=1)    
+                    Index Cond: ("◊À¬ _»ƒ" > 126631)                                                                                        
+        ->  Hash  (cost=108.68..108.68 rows=217 width=17) (actual time=0.307..0.308 rows=214 loops=1)                                       
+              Buckets: 1024  Batches: 1  Memory Usage: 19kB                                                                                 
+              ->  Bitmap Heap Scan on "Õ_Àﬁƒ»" peop  (cost=5.96..108.68 rows=217 width=17) (actual time=0.100..0.261 rows=214 loops=1)      
+                    Recheck Cond: (("‘¿Ã»À»ﬂ")::text < '¿Ù‡Ì‡Ò¸Â‚'::text)                                                                   
+                    Heap Blocks: exact=78                                                                                                   
+                    ->  Bitmap Index Scan on "‘¿Ã_Àﬁƒ"  (cost=0.00..5.91 rows=217 width=0) (actual time=0.086..0.086 rows=214 loops=1)      
+                          Index Cond: (("‘¿Ã»À»ﬂ")::text < '¿Ù‡Ì‡Ò¸Â‚'::text)                                                               
+  ->  Index Scan using "¬≈ƒ_◊À¬ _FK_IFK" on "Õ_¬≈ƒŒÃŒ—“»" ved  (cost=0.29..51.70 rows=68 width=12) (actual time=0.004..0.004 rows=0 loops=3)
+        Index Cond: (("◊À¬ _»ƒ" = sess."◊À¬ _»ƒ") AND ("◊À¬ _»ƒ" > 105590))                                                                 
+Planning Time: 0.710 ms                                                                                                                     
+Execution Time: 0.564 ms                                                                                                                    

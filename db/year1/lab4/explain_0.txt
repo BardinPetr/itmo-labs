@@ -1,0 +1,14 @@
+Nested Loop  (cost=0.29..265.64 rows=1574 width=20) (actual time=0.041..2.913 rows=1598 loops=1)                                      
+  ->  Seq Scan on "Н_СЕССИЯ" sess  (cost=0.00..117.90 rows=2182 width=8) (actual time=0.015..1.565 rows=2182 loops=1)                 
+        Filter: (("УЧГОД")::text < '2008/2009'::text)                                                                                 
+        Rows Removed by Filter: 1570                                                                                                  
+  ->  Memoize  (cost=0.29..0.53 rows=1 width=20) (actual time=0.000..0.000 rows=1 loops=2182)                                         
+        Cache Key: sess."ЧЛВК_ИД"                                                                                                     
+        Cache Mode: logical                                                                                                           
+        Hits: 2051  Misses: 131  Evictions: 0  Overflows: 0  Memory Usage: 15kB                                                       
+        ->  Index Scan using "ЧЛВК_PK" on "Н_ЛЮДИ" peop  (cost=0.28..0.52 rows=1 width=20) (actual time=0.003..0.003 rows=1 loops=131)
+              Index Cond: ("ИД" = sess."ЧЛВК_ИД")                                                                                     
+              Filter: (("ИМЯ")::text < 'Роман'::text)                                                                                 
+              Rows Removed by Filter: 0                                                                                               
+Planning Time: 0.378 ms                                                                                                               
+Execution Time: 3.033 ms                                                                                                              
