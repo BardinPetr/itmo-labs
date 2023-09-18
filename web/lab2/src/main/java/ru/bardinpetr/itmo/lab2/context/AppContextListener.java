@@ -1,4 +1,4 @@
-package ru.bardinpetr.itmo.lab2;
+package ru.bardinpetr.itmo.lab2.context;
 
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
@@ -8,14 +8,15 @@ import ru.bardinpetr.itmo.lab2.auth.keys.JWTHMACKeyProvider;
 import ru.bardinpetr.itmo.lab2.auth.keys.RuntimeJWTStorage;
 
 @WebListener
-public class MainServletContextListener implements ServletContextListener {
+public class AppContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContextListener.super.contextInitialized(sce);
 
-        var jwt = new JWTService(new RuntimeJWTStorage(new JWTHMACKeyProvider()).provider());
+        var keystore = new RuntimeJWTStorage(new JWTHMACKeyProvider());
+        var jwt = new JWTService(keystore.provider());
 
         var ctx = sce.getServletContext();
-        ctx.setAttribute("jwtService", jwt);
+        ctx.setAttribute(ContextHelper.CTX_ATTR_SERVICE_JWT, jwt);
     }
 }

@@ -15,7 +15,7 @@ import java.util.Optional;
 import static ru.bardinpetr.itmo.lab2.utils.RequestUtils.getCookies;
 import static ru.bardinpetr.itmo.lab2.utils.RequestUtils.setCookies;
 
-public class AuthRequestProcessor {
+public class AuthParametersService {
     public static final String ACCESS_TOKEN_COOKIE = "wl2_token_access";
     public static final String REFRESH_TOKEN_COOKIE = "wl2_token_refresh";
 

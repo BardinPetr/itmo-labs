@@ -6,6 +6,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -14,10 +15,11 @@ import java.net.URISyntaxException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 
-@WebServlet(name = "staticServlet", urlPatterns = {"/file/*"}, initParams = {
+@WebServlet(name = "StaticServlet", initParams = {
         @WebInitParam(name = "staticsDir", value = "/static"),
-        @WebInitParam(name = "staticsWebPath", value = "/")
+        @WebInitParam(name = "staticsWebPath", value = "/static")
 })
+@Slf4j
 public class StaticServlet extends HttpServlet {
 
     private Path baseDirectory;
@@ -50,7 +52,8 @@ public class StaticServlet extends HttpServlet {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request");
             return;
         }
-        reqPath = reqPath.replaceFirst("^%s".formatted(baseURLPath), "");
+        reqPath = reqPath.replaceFirst("^%s/".formatted(baseURLPath), "");
+        log.info("Requested static file {}", reqPath);
 
         Path targetFile;
         try {
@@ -60,8 +63,10 @@ public class StaticServlet extends HttpServlet {
             return;
         }
 
+        log.debug("Resolved static file {}", targetFile);
         if (!targetFile.startsWith(baseDirectory)) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, "Access to directories other that base statics dir is prohibited");
+            log.warn("File request security violation: path {}", targetFile);
             return;
         }
 
@@ -76,5 +81,7 @@ public class StaticServlet extends HttpServlet {
         } catch (Exception ex) {
             resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Failed to send file");
         }
+
+        log.debug("Sent file {}", reqPath);
     }
 }
