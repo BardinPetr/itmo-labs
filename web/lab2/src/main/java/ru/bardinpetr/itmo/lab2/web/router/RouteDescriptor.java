@@ -4,16 +4,18 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-public record RouteDescriptor(Predicate<String> matchPredicate, String servletName) {
+public record RouteDescriptor(List<Predicate<String>> allMatchPredicates, Predicate<String> matchPredicate,
+                              String servletName) {
 
     public RouteDescriptor(List<String> pathRegexps, String servletName) {
         this(
+                preparePathPredicates(pathRegexps),
                 mergePredicates(preparePathPredicates(pathRegexps)),
                 servletName
         );
     }
 
-    private static List<Predicate<String>> preparePathPredicates(List<String> pathRegexps) {
+    public static List<Predicate<String>> preparePathPredicates(List<String> pathRegexps) {
         return pathRegexps
                 .stream()
                 .map(i -> "^/%s$".formatted(i.replaceFirst("^/", i)))
@@ -21,7 +23,7 @@ public record RouteDescriptor(Predicate<String> matchPredicate, String servletNa
                 .toList();
     }
 
-    private static Predicate<String> mergePredicates(List<Predicate<String>> predicates) {
+    public static Predicate<String> mergePredicates(List<Predicate<String>> predicates) {
         return request -> predicates.stream().allMatch(i -> i.test(request));
     }
 

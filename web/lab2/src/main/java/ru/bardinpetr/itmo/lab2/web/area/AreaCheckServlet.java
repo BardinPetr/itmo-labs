@@ -1,7 +1,6 @@
 package ru.bardinpetr.itmo.lab2.web.area;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,7 +15,6 @@ import java.io.IOException;
 import java.time.Instant;
 
 @Slf4j
-@WebServlet(name = "AreaCheckServlet")
 public class AreaCheckServlet extends HttpServlet {
 
     private final AreaCheckValidator validator = new AreaCheckValidator();

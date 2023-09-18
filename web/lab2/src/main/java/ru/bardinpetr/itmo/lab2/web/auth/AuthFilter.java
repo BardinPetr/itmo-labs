@@ -1,4 +1,4 @@
-package ru.bardinpetr.itmo.lab2.auth;
+package ru.bardinpetr.itmo.lab2.web.auth;
 
 
 import jakarta.servlet.FilterChain;
@@ -6,13 +6,24 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import ru.bardinpetr.itmo.lab2.auth.AuthParametersService;
 import ru.bardinpetr.itmo.lab2.context.ContextHelper;
+import ru.bardinpetr.itmo.lab2.web.router.RouteDescriptor;
 
 import java.io.IOException;
 
 public class AuthFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+        var publicPaths = ContextHelper.getPublicPaths(getServletContext());
+        if (publicPaths.isPresent()) {
+            var predicate = RouteDescriptor.mergePredicates(publicPaths.get());
+            if (predicate.test(req.getPathInfo())) {
+                chain.doFilter(req, res);
+                return;
+            }
+        }
+
         var jwts = ContextHelper.getJwtService(getServletContext());
         if (jwts.isEmpty()) {
             res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Auth service misconfiguration");

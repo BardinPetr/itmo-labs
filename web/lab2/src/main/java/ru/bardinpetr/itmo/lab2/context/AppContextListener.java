@@ -9,14 +9,15 @@ import ru.bardinpetr.itmo.lab2.auth.keys.RuntimeJWTStorage;
 
 @WebListener
 public class AppContextListener implements ServletContextListener {
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        ServletContextListener.super.contextInitialized(sce);
-
         var keystore = new RuntimeJWTStorage(new JWTHMACKeyProvider());
         var jwt = new JWTService(keystore.provider());
 
         var ctx = sce.getServletContext();
         ctx.setAttribute(ContextHelper.CTX_ATTR_SERVICE_JWT, jwt);
+
+        ServletContextListener.super.contextInitialized(sce);
     }
 }

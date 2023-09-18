@@ -1,8 +1,6 @@
 package ru.bardinpetr.itmo.lab2.web;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebInitParam;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,10 +13,6 @@ import java.net.URISyntaxException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 
-@WebServlet(name = "StaticServlet", initParams = {
-        @WebInitParam(name = "staticsDir", value = "/static"),
-        @WebInitParam(name = "staticsWebPath", value = "/static")
-})
 @Slf4j
 public class StaticServlet extends HttpServlet {
 
