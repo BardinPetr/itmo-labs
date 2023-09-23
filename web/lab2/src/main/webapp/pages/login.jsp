@@ -4,18 +4,18 @@
     <title>Login</title>
 </head>
 <body>
-    <form>
-        <label>
-            Email:
-            <input type="email" name="login">
-        </label>
-        <label>
-            Password:
-            <input type="password" name="password">
-        </label>
-        <input type="submit" value="Login" formaction="/login">
-        <input type="submit" value="Register" formaction="/register">
-    </form>
+<form method="POST">
+    <label>
+        Email:
+        <input type="email" name="login">
+    </label>
+    <label>
+        Password:
+        <input type="password" name="password">
+    </label>
+    <input type="submit" value="Login" formaction="/auth/login">
+    <input type="submit" value="Register" formaction="/auth/register">
+</form>
 
 </body>
 </html>

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class ContextHelper {
+public class AppContextHelper {
 
     public static final String CTX_ATTR_SERVICE_JWT = "ctx_s_jwt";
     public static final String CTX_ATTR_PUBLIC_PATHS = "ctx_auth_public_paths";

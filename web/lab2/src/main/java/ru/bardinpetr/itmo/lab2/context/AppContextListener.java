@@ -16,7 +16,7 @@ public class AppContextListener implements ServletContextListener {
         var jwt = new JWTService(keystore.provider());
 
         var ctx = sce.getServletContext();
-        ctx.setAttribute(ContextHelper.CTX_ATTR_SERVICE_JWT, jwt);
+        ctx.setAttribute(AppContextHelper.CTX_ATTR_SERVICE_JWT, jwt);
 
         ServletContextListener.super.contextInitialized(sce);
     }

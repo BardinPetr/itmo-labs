@@ -6,31 +6,34 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import ru.bardinpetr.itmo.lab2.auth.AuthParametersService;
-import ru.bardinpetr.itmo.lab2.context.ContextHelper;
-import ru.bardinpetr.itmo.lab2.web.router.RouteDescriptor;
+import ru.bardinpetr.itmo.lab2.auth.AuthInjector;
+import ru.bardinpetr.itmo.lab2.auth.user.JWTUserInfo;
+import ru.bardinpetr.itmo.lab2.context.AppContextHelper;
+import ru.bardinpetr.itmo.lab2.context.RequestContextHelper;
 
 import java.io.IOException;
+
+import static ru.bardinpetr.itmo.lab2.utils.Predicates.predicateAny;
 
 public class AuthFilter extends HttpFilter {
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        var publicPaths = ContextHelper.getPublicPaths(getServletContext());
+        var publicPaths = AppContextHelper.getPublicPaths(getServletContext());
         if (publicPaths.isPresent()) {
-            var predicate = RouteDescriptor.mergePredicates(publicPaths.get());
+            var predicate = predicateAny(publicPaths.get());
             if (predicate.test(req.getPathInfo())) {
                 chain.doFilter(req, res);
                 return;
             }
         }
 
-        var jwts = ContextHelper.getJwtService(getServletContext());
+        var jwts = AppContextHelper.getJwtService(getServletContext());
         if (jwts.isEmpty()) {
             res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Auth service misconfiguration");
             return;
         }
 
-        var jwtPair = AuthParametersService.extract(req);
+        var jwtPair = AuthInjector.extract(req);
 
         if (jwtPair.getPreferableToken().isEmpty()) {
             res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "No tokens present");
@@ -38,13 +41,16 @@ public class AuthFilter extends HttpFilter {
         }
 
         var authResponse = jwts.get().authenticate(jwtPair);
-        if (!authResponse.isAuthenticated()) {
+        if (!authResponse.isAuthenticated() || authResponse.subject().isEmpty()) {
             res.sendError(HttpServletResponse.SC_FORBIDDEN, "Tokens are invalid");
             return;
         }
 
         if (authResponse.update().isPresent())
-            AuthParametersService.inject(res, authResponse.update().get());
+            AuthInjector.inject(res, authResponse.update().get());
+
+        JWTUserInfo user = authResponse.subject().get();
+        req.setAttribute(RequestContextHelper.CTX_ATTR_USER, user);
 
         chain.doFilter(req, res);
     }
