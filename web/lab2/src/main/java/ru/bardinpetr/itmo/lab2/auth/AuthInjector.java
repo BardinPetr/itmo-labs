@@ -33,6 +33,24 @@ public class AuthInjector {
         );
     }
 
+    public static void clear(HttpServletResponse response) {
+        setCookies(
+                response,
+                true,
+                List.of(
+                        CookieBuilder
+                                .named(ACCESS_TOKEN_COOKIE)
+                                .value("")
+                                .maxAge(1),
+                        CookieBuilder
+                                .named(REFRESH_TOKEN_COOKIE)
+                                .value("")
+                                .maxAge(1)
+
+                )
+        );
+    }
+
     public static void inject(HttpServletResponse response, JWTTokenPairContainer authData) {
         if (authData.accessToken().isEmpty() || authData.refreshToken().isEmpty())
             throw new RuntimeException("Sending cookies without one of tokens is prohibited");

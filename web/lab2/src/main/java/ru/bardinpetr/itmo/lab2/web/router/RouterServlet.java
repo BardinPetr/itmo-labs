@@ -7,10 +7,13 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import ru.bardinpetr.itmo.lab2.context.AppContextHelper;
 import ru.bardinpetr.itmo.lab2.context.RequestContextHelper;
+import ru.bardinpetr.itmo.lab2.web.router.models.HTTPMethod;
 
 import java.io.IOException;
 import java.util.*;
 import java.util.function.Predicate;
+
+import static ru.bardinpetr.itmo.lab2.utils.RequestUtils.getUri;
 
 @Slf4j
 public class RouterServlet extends HttpServlet {
@@ -23,7 +26,7 @@ public class RouterServlet extends HttpServlet {
     }
 
     /**
-     * Iterate over registered URLs for servlets and delegate request to first matched in order of registration
+     * Iterate over registered URLs for servlets and delegate request to first matched servlet in order of registration
      *
      * @param req  the {@link HttpServletRequest} object that contains the request the client made of the servlet
      * @param resp the {@link HttpServletResponse} object that contains the response the servlet returns to the client
@@ -38,12 +41,7 @@ public class RouterServlet extends HttpServlet {
             return;
         }
 
-        var path = req.getPathInfo();
-        if (path == null) {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Route not found");
-            return;
-        }
-
+        var path = getUri(req);
         log.info("Processing {} request on {}", method, path);
 
         var selectedDispatcher = resolveDispatcher(req, resp);
@@ -76,7 +74,7 @@ public class RouterServlet extends HttpServlet {
 
         var handler = routes
                 .stream()
-                .filter(i -> i.test(req.getPathInfo()))
+                .filter(i -> i.test(getUri(req)))
                 .findFirst();
 
         if (handler.isEmpty())
@@ -91,7 +89,7 @@ public class RouterServlet extends HttpServlet {
 //    private Optional<RequestDispatcher> resolveJSP(HttpServletRequest req, HttpServletResponse resp) {
 //        var handler = jspRoutes
 //                .stream()
-//                .filter(i -> i.test(req.getPathInfo()))
+//                .filter(i -> i.test(req.()))
 //                .findFirst();
 //
 //        if (handler.isEmpty())
@@ -140,7 +138,7 @@ public class RouterServlet extends HttpServlet {
      * @param jspPath    string uri for getting dispatcher
      */
     protected ServletRegistration.Dynamic use(ServletContext ctx, String uri, boolean authorized, String jspPath) {
-        var name = String.join("", uri.split("\\W"));
+        var name = String.join("", jspPath.split("\\W"));
         var dynamic = ctx.addJspFile(name, jspPath);
 
         var descriptor = new RouteDescriptor(List.of(uri), name);

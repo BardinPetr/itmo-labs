@@ -13,6 +13,8 @@ import java.net.URISyntaxException;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 
+import static ru.bardinpetr.itmo.lab2.utils.RequestUtils.getUri;
+
 @Slf4j
 public class StaticServlet extends HttpServlet {
 
@@ -41,7 +43,7 @@ public class StaticServlet extends HttpServlet {
             return;
         }
 
-        var reqPath = req.getPathInfo();
+        var reqPath = getUri(req);
         if (reqPath == null || !reqPath.startsWith(baseURLPath)) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid request");
             return;

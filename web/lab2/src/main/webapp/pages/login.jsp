@@ -13,8 +13,8 @@
         Password:
         <input type="password" name="password">
     </label>
-    <input type="submit" value="Login" formaction="/auth/login">
-    <input type="submit" value="Register" formaction="/auth/register">
+    <input type="submit" value="Login" formaction="/app/auth/login">
+    <input type="submit" value="Register" formaction="/app/auth/register">
 </form>
 
 </body>

@@ -21,7 +21,7 @@ public record RouteDescriptor(List<Predicate<String>> allMatchPredicates,
     public static List<Predicate<String>> preparePathPredicates(List<String> pathRegexps) {
         return pathRegexps
                 .stream()
-                .map(i -> "^/%s$".formatted(i.replaceFirst("^/", i)))
+                .map(i -> "^/%s$".formatted(i.replaceFirst("^/", "")))
                 .map(i -> Pattern.compile(i).asMatchPredicate())
                 .toList();
     }

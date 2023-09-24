@@ -16,7 +16,6 @@ public class AppInitializer implements ServletContainerInitializer {
         var appRouter = new AppRouterServlet(ctx);
 
         var mainServlet = ctx.addServlet("routerServlet", appRouter);
-        mainServlet.setLoadOnStartup(0);
         mainServlet.addMapping("/*");
 
         log.warn("Initializing root router ended");

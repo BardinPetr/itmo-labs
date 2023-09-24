@@ -14,6 +14,7 @@ import ru.bardinpetr.itmo.lab2.context.RequestContextHelper;
 import java.io.IOException;
 
 import static ru.bardinpetr.itmo.lab2.utils.Predicates.predicateAny;
+import static ru.bardinpetr.itmo.lab2.utils.RequestUtils.getUri;
 
 public class AuthFilter extends HttpFilter {
     @Override
@@ -21,7 +22,8 @@ public class AuthFilter extends HttpFilter {
         var publicPaths = AppContextHelper.getPublicPaths(getServletContext());
         if (publicPaths.isPresent()) {
             var predicate = predicateAny(publicPaths.get());
-            if (predicate.test(req.getPathInfo())) {
+            var path = getUri(req);
+            if (predicate.test(path)) {
                 chain.doFilter(req, res);
                 return;
             }
