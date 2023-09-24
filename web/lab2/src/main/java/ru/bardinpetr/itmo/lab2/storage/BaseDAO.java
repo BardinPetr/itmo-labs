@@ -1,22 +1,26 @@
 package ru.bardinpetr.itmo.lab2.storage;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Provides interface for handling requests over tables
+ *
  * @param <K> Row primary key type
  * @param <R> Table row type
  */
-public interface BaseTableDAO<K, R> {
+public interface BaseDAO<K, R extends DBRow<K>> {
     void clear();
 
-    void insert(R data);
+    boolean insert(R data);
+
+    boolean exists(K id);
 
     void remove(K id);
 
-    void update(K id, R update);
+    boolean update(K id, R update);
 
-    R get(K id);
+    Optional<R> get(K id);
 
     List<R> getAll();
 }
