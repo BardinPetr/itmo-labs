@@ -37,3 +37,7 @@ bin/
 
 ### Mac OS ###
 .DS_Store
+
+### WEB build files
+webapp/static/dist/
+node_modules/

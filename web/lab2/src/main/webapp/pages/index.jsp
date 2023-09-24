@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>Login</title>
+    <link rel="stylesheet" href="static/dist/MainPage.css">
+    <script src="static/dist/MainPage.js"></script>
 </head>
 <body>
 
