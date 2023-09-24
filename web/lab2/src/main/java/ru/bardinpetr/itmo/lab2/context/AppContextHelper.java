@@ -13,11 +13,11 @@ import java.util.function.Predicate;
 
 public class AppContextHelper {
 
-    public static final String CTX_ATTR_SERVICE_JWT = "ctx_s_jwt";
-    public static final String CTX_ATTR_SERVICE_PASSWORD = "ctx_s_pwd";
-    public static final String CTX_ATTR_SERVICE_DB_USER = "ctx_s_db_users";
-    public static final String CTX_ATTR_SERVICE_DB_POINT = "ctx_s_db_pts";
-    public static final String CTX_ATTR_PUBLIC_PATHS = "ctx_auth_public_paths";
+    public static final String CTX_ATTR_SERVICE_JWT = "jwtService";
+    public static final String CTX_ATTR_SERVICE_PASSWORD = "passwordService";
+    public static final String CTX_ATTR_SERVICE_DB_USER = "usersDatabase";
+    public static final String CTX_ATTR_SERVICE_DB_POINT = "pointsDatabase";
+    public static final String CTX_ATTR_PUBLIC_PATHS = "authPublicPaths";
 
     @SuppressWarnings("unchecked")
     private static <T> Optional<T> get(ServletContext context, String attr) {

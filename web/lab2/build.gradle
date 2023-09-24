@@ -21,9 +21,10 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
-    compileOnly("jakarta.servlet:jakarta.servlet-api:5.0.0")
-    compileOnly("jakarta.mvc:jakarta.mvc-api:2.0.0")
-    compileOnly("jakarta.json:jakarta.json-api:2.0.1")
+    compileOnly "jakarta.servlet:jakarta.servlet-api:5.0.0"
+    compileOnly "jakarta.mvc:jakarta.mvc-api:2.0.0"
+//    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.0'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.1'
 
     implementation "io.jsonwebtoken:jjwt-api:0.11.5"
     runtimeOnly "io.jsonwebtoken:jjwt-impl:0.11.5"
@@ -54,5 +55,6 @@ tasks.register('frontend_setup', YarnTask) {
 
 war {
     exclude("src/**")
+    duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
     dependsOn("yarn_build")
 }

@@ -61,7 +61,6 @@ public class InMemoryDB<K, R extends DBRow<K>> implements BaseDAO<K, R> {
                 .filter(i -> i.getPrimaryKey().equals(id))
                 .findFirst();
     }
-
     @Override
     public List<R> getAll() {
         return list;

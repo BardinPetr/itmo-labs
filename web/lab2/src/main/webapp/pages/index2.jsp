@@ -1,16 +1,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
+<c:set value="JSTL Core Tags Example" var="pageTitle"/>
 
 <html>
 <head>
-    <title>Lab 2</title>
+    <title><c:out value="${pageTitle}"/></title>
     <link rel="stylesheet" href="static/dist/MainPage.css">
     <%--    <script src="static/dist/MainPage.js"></script>--%>
 
 </head>
 <body>
 
-<%@ include file="../components/header.jsp" %>
+<%--<c:import url="../components/header.jsp"/>--%>
+<%--<%@ include file="../components/header.jsp"%>--%>
 
 <table class="container" id="page-base">
     <tr>
