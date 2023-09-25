@@ -27,7 +27,7 @@ public class AppRouterServlet extends RouterServlet {
 //        filter.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST), true, "/*");
 
         use(ctx, "login.jsp", false, "/pages/login.jsp");
-        use(ctx, "index.jsp", false, "/pages/index.jsp");
+        use(ctx, "index.jsp", true, "/pages/index.jsp");
 
         use(ctx, List.of("check"), List.of(HTTPMethod.GET), true, AreaCheckServlet.class);
         use(ctx, List.of("auth/.*"), List.of(HTTPMethod.POST), false, AuthServlet.class);

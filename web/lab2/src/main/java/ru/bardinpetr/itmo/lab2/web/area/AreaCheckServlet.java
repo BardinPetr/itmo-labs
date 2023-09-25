@@ -1,5 +1,6 @@
 package ru.bardinpetr.itmo.lab2.web.area;
 
+import jakarta.servlet.ServletConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,11 +15,23 @@ import ru.bardinpetr.itmo.lab2.web.area.models.CheckResponse;
 import java.io.IOException;
 import java.time.Instant;
 
+import static ru.bardinpetr.itmo.lab2.context.AppContextHelper.getAreaRestrictions;
+
 @Slf4j
 public class AreaCheckServlet extends HttpServlet {
 
-    private final AreaCheckValidator validator = new AreaCheckValidator();
     private final AreaCheckService service = new AreaCheckService();
+    private AreaCheckValidator validator;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        var restrict = getAreaRestrictions(getServletContext());
+        if (restrict.isEmpty())
+            throw new ServletException("Restrictions not configured");
+        validator = new AreaCheckValidator(restrict.get());
+    }
 
     private ValidatorResponse<CheckRequestDTO, CheckRequest> extractRequest(HttpServletRequest req) {
         var source = new CheckRequestDTO(

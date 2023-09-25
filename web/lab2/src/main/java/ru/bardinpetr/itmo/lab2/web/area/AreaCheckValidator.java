@@ -17,11 +17,11 @@ import java.util.List;
 public class AreaCheckValidator extends Validator<CheckRequestDTO, CheckRequest> {
     private final AndValidator<String, Double> andValidator;
 
-    public AreaCheckValidator() {
+    public AreaCheckValidator(AreaRestrictions restrictions) {
         this.andValidator = new AndValidator<>(List.of(
-                new DoubleValidator(false, 2d, false, 5d),
-                new DoubleValidator(true, -3d, true, 5d),
-                new DoubleValidator(false, -5d, false, 3d)
+                new DoubleValidator(restrictions.getRRangeInclusive()[0], restrictions.getRRange()[0], restrictions.getRRangeInclusive()[1], restrictions.getRRange()[1]),
+                new DoubleValidator(restrictions.getXRangeInclusive()[0], restrictions.getXRange()[0], restrictions.getXRangeInclusive()[1], restrictions.getXRange()[1]),
+                new DoubleValidator(restrictions.getYRangeInclusive()[0], restrictions.getYRange()[0], restrictions.getYRangeInclusive()[1], restrictions.getYRange()[1])
         ));
     }
 

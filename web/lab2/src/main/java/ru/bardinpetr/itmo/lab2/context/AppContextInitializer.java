@@ -10,6 +10,7 @@ import ru.bardinpetr.itmo.lab2.auth.keys.RuntimeJWTStorage;
 import ru.bardinpetr.itmo.lab2.auth.utils.PasswordService;
 import ru.bardinpetr.itmo.lab2.storage.impl.PointResultDatabase;
 import ru.bardinpetr.itmo.lab2.storage.impl.UserDatabase;
+import ru.bardinpetr.itmo.lab2.web.area.AreaRestrictions;
 
 @WebListener
 public class AppContextInitializer implements ServletContextListener {
@@ -18,10 +19,19 @@ public class AppContextInitializer implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         var ctx = sce.getServletContext();
 
+        checkFacade(ctx);
         dbFacade(ctx);
         authFacade(ctx);
 
         ServletContextListener.super.contextInitialized(sce);
+    }
+
+    private void checkFacade(ServletContext ctx) {
+        ctx.setAttribute(AppContextHelper.CTX_ATTR_SERVICE_AREA_RESTRICTIONS, new AreaRestrictions(
+                new Double[]{2d, 5d}, new Boolean[]{false, false},
+                new Double[]{-3d, 5d}, new Boolean[]{true, true},
+                new Double[]{-5d, 3d}, new Boolean[]{false, false}
+        ));
     }
 
     private void authFacade(ServletContext ctx) {

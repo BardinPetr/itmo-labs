@@ -11,7 +11,7 @@
 
 #table-input {
   td {
-    input,
+    input:not([type="checkbox"]),
     select {
       width: 100%;
     }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<taglib>
+	<tlib-version>1.0</tlib-version>
+	<jsp-version>3.0</jsp-version>
+	<short-name>LAB2-extensions</short-name>
+
+	<tag>
+		<name>rangeString</name>
+		<tag-class>ru.bardinpetr.itmo.lab2.tags.RangeStringTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>range</name>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.Double[]</type>
+			<required>true</required>
+		</attribute>
+		<attribute>
+			<name>inclusive</name>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.Boolean[]</type>
+			<required>true</required>
+		</attribute>
+	</tag>
+</taglib>

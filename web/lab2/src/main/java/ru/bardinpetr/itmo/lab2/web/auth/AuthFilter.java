@@ -41,6 +41,8 @@ public class AuthFilter extends HttpFilter {
 
     @Override
     protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+        chain.doFilter(req, res);
+
         var publicPaths = AppContextHelper.getPublicPaths(getServletContext());
         if (publicPaths.isPresent()) {
             var predicate = predicateAny(publicPaths.get());
