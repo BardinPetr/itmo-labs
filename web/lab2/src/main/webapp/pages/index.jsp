@@ -2,12 +2,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 
 <html>
-<head>
-    <title>Lab 2</title>
-    <link rel="stylesheet" href="static/dist/MainPage.css">
-    <%--    <script src="static/dist/MainPage.js"></script>--%>
-
-</head>
+<%@ include file="../components/head.jsp" %>
 <body>
 
 <%@ include file="../components/header.jsp" %>

@@ -22,13 +22,13 @@
             <td><span id="error-msg-x"></span></td>
         </tr>
         <tr>
-            <td><label>Enter Y</label></td>
+            <td><label for="input-y">Enter Y</label></td>
             <td>
                 <input
                         id="input-y"
                         name="y"
                         type="text"
-                        maxlength="10"
+                        maxlength="9"
                         placeholder="<x:rangeString range='${restrictions.YRange}' inclusive='${restrictions.YRangeInclusive}'/>"
                 >
             </td>
@@ -38,7 +38,7 @@
             <td><span id="error-msg-y"></span></td>
         </tr>
         <tr>
-            <td><label>Enter R</label></td>
+            <td><label for="input-r">Enter R</label></td>
             <td>
                 <input
                         id="input-r"

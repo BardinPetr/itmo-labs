@@ -6,31 +6,40 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import ru.bardinpetr.itmo.lab2.models.AreaConfig;
+import ru.bardinpetr.itmo.lab2.models.Point;
+import ru.bardinpetr.itmo.lab2.models.PointResult;
+import ru.bardinpetr.itmo.lab2.storage.impl.PointResultDatabase;
 import ru.bardinpetr.itmo.lab2.utils.ExecutionTimer;
 import ru.bardinpetr.itmo.lab2.utils.validators.models.ValidatorResponse;
 import ru.bardinpetr.itmo.lab2.web.area.models.CheckRequest;
 import ru.bardinpetr.itmo.lab2.web.area.models.CheckRequestDTO;
-import ru.bardinpetr.itmo.lab2.web.area.models.CheckResponse;
 
 import java.io.IOException;
 import java.time.Instant;
 
 import static ru.bardinpetr.itmo.lab2.context.AppContextHelper.getAreaRestrictions;
+import static ru.bardinpetr.itmo.lab2.context.AppContextHelper.getPointsDB;
+import static ru.bardinpetr.itmo.lab2.utils.RequestUtils.redirect;
 
 @Slf4j
 public class AreaCheckServlet extends HttpServlet {
 
     private final AreaCheckService service = new AreaCheckService();
     private AreaCheckValidator validator;
+    private PointResultDatabase db;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
 
         var restrict = getAreaRestrictions(getServletContext());
-        if (restrict.isEmpty())
+        var db = getPointsDB(getServletContext());
+        if (restrict.isEmpty() || db.isEmpty())
             throw new ServletException("Restrictions not configured");
+
         validator = new AreaCheckValidator(restrict.get());
+        this.db = db.get();
     }
 
     private ValidatorResponse<CheckRequestDTO, CheckRequest> extractRequest(HttpServletRequest req) {
@@ -60,16 +69,21 @@ public class AreaCheckServlet extends HttpServlet {
         var input = inputCheckRequest.value().get();
         boolean response = service.checkInside(input);
 
-        var executionTimeMs = timer.measureMillis();
-        var res = new CheckResponse(
-                input.r(), input.x(), input.y(),
+        var executionTime = timer.measure();
+        var res = new PointResult(
+                -1,
+                new Point(input.x(), input.y()),
+                new AreaConfig(input.r()),
                 response,
-                executionTimeMs,
-                Instant.now()
+                Instant.now(),
+                executionTime
         );
 
         log.info("Area check result: {}", res);
 
-        resp.getWriter().println(res);
+        db.insert(res);
+
+        req.setAttribute("checkResult", res);
+        redirect(req, resp, "/index.jsp");
     }
 }

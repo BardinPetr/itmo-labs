@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 public class DoubleValidator extends Validator<String, Double> {
-    private static final int MAX_DIGITS = 9;
+    private static final int MAX_DIGITS = 12;
     private static final Predicate<String> CHECK_PATTERN = Pattern.compile("^-?\\d+(\\.\\d+)?$").asMatchPredicate();
 
     private final boolean minInclusive;

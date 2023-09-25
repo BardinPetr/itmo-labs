@@ -1,10 +1,13 @@
-export const xInputMinValue = -4;
-export const xInputMaxValue = 4;
-export const xInputStep = 1;
+const {XRange, YRange, RRange, XInclusive, YInclusive, RInclusive} = window.lab.constraints;
 
-export const rInputMinValue = 1;
-export const rInputMaxValue = 3;
-export const rInputStep = 0.5;
+export const xInputMinValue = XRange[0];
+export const xInputMaxValue = XRange[1];
+export const xInclusive = XInclusive.every(i => i);
 
-export const yInputMinValue = -3;
-export const yInputMaxValue = 5;
+export const rInputMinValue = RRange[0];
+export const rInputMaxValue = RRange[1];
+export const rInclusive = RInclusive.every(i => i);
+
+export const yInputMinValue = YRange[0];
+export const yInputMaxValue = YRange[1];
+export const yInclusive = YInclusive.every(i => i);

@@ -12,12 +12,12 @@
     DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
 
     pageContext.setAttribute("formatDate", (Function<Instant, String>) (i) -> formatter.format(new Date(i.toEpochMilli())));
-    pageContext.setAttribute("formatDouble", (Function<Double, String>) "%.2f"::formatted);
+    pageContext.setAttribute("formatDouble", (Function<Double, String>) "%.3f"::formatted);
 %>
 
 <table id="table-result" class="data-table">
     <tr>
-        <c:forEach var="cname" items="${['ID', 'Timestamp', 'R', 'X', 'Y', 'Result', 'Execution Time, ms']}">
+        <c:forEach var="cname" items="${['ID', 'Timestamp', 'Inside', 'R', 'X', 'Y', 'Execution Time, ms']}">
             <td>${cname}</td>
         </c:forEach>
     </tr>
@@ -27,9 +27,9 @@
             <td>${formatDate.apply(i.timestamp())}</td>
             <td>${i.inside ? "&#128309" : "&#128308"}</td>
             <td>${formatDouble.apply(i.area().r())}</td>
-            <td>${formatDouble.apply(i.point().y())}</td>
             <td>${formatDouble.apply(i.point().x())}</td>
-            <td>${i.executionTime().toMillis()}</td>
+            <td>${formatDouble.apply(i.point().y())}</td>
+            <td>${formatDouble.apply(i.executionTime().toNanos()/1e6)}</td>
         </tr>
     </c:forEach>
 </table>

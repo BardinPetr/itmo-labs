@@ -46,20 +46,19 @@ class FigureDisplay extends PlotDisplay {
 
             c.beginPath();
             c.moveTo(...this._toCanvas([0, 0]));
+            line(0, R / 2);
             line(R, 0);
-            line(0, -R / 2);
-            line(0, -R);
-            line(-R / 2, -R);
+            line(R / 2, 0);
             line(-R / 2, 0);
-            line(-R, 0);
             c.arc(
                 ...this._toCanvas([0, 0]),
-                R * this._ratio,
-                -Math.PI / 2,
-                Math.PI,
-                true
+                R * this._ratio / 2,
+                0,
+                Math.PI / 2,
+                false
             );
-            line(0, R);
+            line(-R, -R / 2);
+            line(-R, 0);
             c.closePath();
             c.fillStyle = "#DD00AAA0";
             c.fill();

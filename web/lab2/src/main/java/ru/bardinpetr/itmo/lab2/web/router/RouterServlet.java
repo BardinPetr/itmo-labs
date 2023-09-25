@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import ru.bardinpetr.itmo.lab2.context.AppContextHelper;
-import ru.bardinpetr.itmo.lab2.context.RequestContextHelper;
 import ru.bardinpetr.itmo.lab2.web.router.models.HTTPMethod;
 
 import java.io.IOException;
@@ -52,7 +51,6 @@ public class RouterServlet extends HttpServlet {
 
         var dispatcher = selectedDispatcher.get();
         log.info("Forwarded {} request on {} to {}", method, path, dispatcher);
-        req.setAttribute(RequestContextHelper.CTX_ATTR_FWD, true);
         dispatcher.forward(req, resp);
     }
 

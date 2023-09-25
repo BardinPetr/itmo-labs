@@ -7,8 +7,8 @@ import java.util.Optional;
 
 public class RequestContextHelper {
 
-    public static final String CTX_ATTR_USER = "req_user";
-    public static final String CTX_ATTR_FWD = "req_forwarded";
+    public static final String CTX_ATTR_USER = "user";
+    public static final String CTX_ATTR_CHECK_RESPONSE = "checkResponse";
 
     @SuppressWarnings("unchecked")
     private static <T> Optional<T> get(ServletRequest context, String attr) {
@@ -17,9 +17,5 @@ public class RequestContextHelper {
 
     public static Optional<JWTUserInfo> getUser(ServletRequest context) {
         return get(context, CTX_ATTR_USER);
-    }
-
-    public static Optional<Boolean> wasForwarded(ServletRequest context) {
-        return get(context, CTX_ATTR_FWD);
     }
 }

@@ -1,13 +1,14 @@
 import PointResult from "./PointResult.js";
 
 class PointResultStorage {
-    static STORAGE_KEY = "lab1-prs";
     #callbacks = {
         clear: [],
         insert: [],
     };
 
     constructor() {
+        let data = this.get();
+        this.#notify("insert", data)
     }
 
     on(type, callback) {
@@ -18,35 +19,25 @@ class PointResultStorage {
         this.#callbacks[type].forEach((cb) => cb(data));
     }
 
-    #serialize(list) {
-        return JSON.stringify(list);
-    }
-
-    #deserialize(data) {
-        return JSON.parse(data).map((i) => new PointResult(i));
-    }
-
     #store(data) {
-        localStorage.setItem(PointResultStorage.STORAGE_KEY, this.#serialize(data));
     }
 
     clear() {
-        this.#store([]);
-        this.#notify("clear");
     }
 
     get() {
-        let data = localStorage.getItem(PointResultStorage.STORAGE_KEY);
-        if (!data) {
-            this.clear();
-            return [];
-        }
-        return this.#deserialize(data);
+        return window.lab.history.map(i => new PointResult({
+            id: i[0],
+            x: i[1],
+            y: i[2],
+            r: i[3],
+            result: i[4],
+            timestamp: i[5],
+            executionTime: i[6]
+        }))
     }
 
     add(data) {
-        this.#store([...this.get(), data]);
-        this.#notify("insert", data);
     }
 }
 

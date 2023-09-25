@@ -1,24 +1,13 @@
-import PointResult from "../data/PointResult.js";
-
-const BASE_URL = `${location.origin}`;
+const BASE_URL = `${location.origin}/app`;
 
 export async function checkPointRequest(x, y, r) {
-    return $.ajax({
-        url: `${BASE_URL}/check.php`,
-        data: {r, x, y},
-        dataType: "json",
-    })
-        .then((data) => ({
-            result: new PointResult({
-                x,
-                y,
-                r,
-                result: data.result.inside,
-                timestamp: data.timestamp,
-                executionTime: data.executionTime,
-            }),
-        }))
-        .catch((data) => ({
-            err: data.responseJSON ? data.responseJSON.err : "Connection error",
-        }));
+    console.log(x.toFixed(9))
+    return $.get({
+        url: `${BASE_URL}/check`,
+        data: {
+            r: r.toFixed(9),
+            x: x.toFixed(9),
+            y: y.toFixed(9)
+        },
+    });
 }

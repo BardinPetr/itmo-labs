@@ -19,9 +19,9 @@ public class AreaCheckValidator extends Validator<CheckRequestDTO, CheckRequest>
 
     public AreaCheckValidator(AreaRestrictions restrictions) {
         this.andValidator = new AndValidator<>(List.of(
-                new DoubleValidator(restrictions.getRRangeInclusive()[0], restrictions.getRRange()[0], restrictions.getRRangeInclusive()[1], restrictions.getRRange()[1]),
-                new DoubleValidator(restrictions.getXRangeInclusive()[0], restrictions.getXRange()[0], restrictions.getXRangeInclusive()[1], restrictions.getXRange()[1]),
-                new DoubleValidator(restrictions.getYRangeInclusive()[0], restrictions.getYRange()[0], restrictions.getYRangeInclusive()[1], restrictions.getYRange()[1])
+                new DoubleValidator(restrictions.getRInclusive()[0], restrictions.getRRange()[0], restrictions.getRInclusive()[1], restrictions.getRRange()[1]),
+                new DoubleValidator(restrictions.getXInclusive()[0], restrictions.getXRange()[0], restrictions.getXInclusive()[1], restrictions.getXRange()[1]),
+                new DoubleValidator(restrictions.getYInclusive()[0], restrictions.getYRange()[0], restrictions.getYInclusive()[1], restrictions.getYRange()[1])
         ));
     }
 

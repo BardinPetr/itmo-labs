@@ -9,16 +9,16 @@ import java.util.stream.IntStream;
 @Getter
 public class AreaRestrictions {
     private final Double[] rRange;
-    private final Boolean[] rRangeInclusive;
+    private final Boolean[] rInclusive;
     private final Double[] xRange;
-    private final Boolean[] xRangeInclusive;
+    private final Boolean[] xInclusive;
     private final Double[] yRange;
-    private final Boolean[] yRangeInclusive;
+    private final Boolean[] yInclusive;
 
     public int[] getXOptions() {
         return IntStream.range(
-                (int) Math.round(xRange[0]) + (xRangeInclusive[0] ? 0 : 1),
-                (int) Math.round(xRange[1]) + (xRangeInclusive[1] ? 1 : 0)
+                (int) Math.round(xRange[0]) + (xInclusive[0] ? 0 : 1),
+                (int) Math.round(xRange[1]) + (xInclusive[1] ? 1 : 0)
         ).toArray();
     }
 }

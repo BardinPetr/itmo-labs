@@ -1,5 +1,7 @@
 package ru.bardinpetr.itmo.lab2.utils;
 
+import java.time.Duration;
+
 public class ExecutionTimer {
     private final long startTime;
 
@@ -11,7 +13,7 @@ public class ExecutionTimer {
         return System.nanoTime();
     }
 
-    public double measureMillis() {
-        return 1e-6 * (nanos() - startTime);
+    public Duration measure() {
+        return Duration.ofNanos(nanos() - startTime);
     }
 }
