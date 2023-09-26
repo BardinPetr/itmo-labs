@@ -6,6 +6,7 @@ import jakarta.servlet.ServletContext;
 import lombok.extern.slf4j.Slf4j;
 import ru.bardinpetr.itmo.lab2.web.StaticServlet;
 import ru.bardinpetr.itmo.lab2.web.area.AreaCheckServlet;
+import ru.bardinpetr.itmo.lab2.web.area.DBServlet;
 import ru.bardinpetr.itmo.lab2.web.auth.AuthFilter;
 import ru.bardinpetr.itmo.lab2.web.auth.AuthServlet;
 import ru.bardinpetr.itmo.lab2.web.router.RouterServlet;
@@ -30,6 +31,7 @@ public class ControllerServlet extends RouterServlet {
         use(ctx, "error.jsp", List.of(GET, POST), false, "/pages/error.jsp");
 
         use(ctx, List.of("check"), List.of(GET), true, AreaCheckServlet.class);
+        use(ctx, List.of("db/.*"), List.of(POST), true, DBServlet.class);
         use(ctx, List.of("auth/.*"), List.of(POST), false, AuthServlet.class);
 
         var staticServlet = use(ctx, List.of("static/.*"), List.of(GET), false, StaticServlet.class);

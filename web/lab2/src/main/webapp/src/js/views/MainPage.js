@@ -43,6 +43,7 @@ class MainPage {
     #changeR(newR) {
         this.#R = newR;
         this.#plot.redraw({R: this.#R});
+        this.#store.setR(newR);
     }
 
     render() {
@@ -59,17 +60,17 @@ class MainPage {
         const xValidator = new FloatValidator(
             inputMessage.x,
             C.xInputMinValue, C.xInputMaxValue,
-            true
+            C.xInclusive
         );
         const rValidator = new FloatValidator(
             inputMessage.r,
             C.rInputMinValue, C.rInputMaxValue,
-            true
+            C.rInclusive
         );
         const yValidator = new FloatValidator(
             inputMessage.y,
             C.yInputMinValue, C.yInputMaxValue,
-            false
+            C.yInclusive
         );
 
         // Final validator
@@ -103,6 +104,14 @@ class MainPage {
                 xValidator.update("")
             }
         })
+
+
+        let oldR = this.#store.getR();
+        if (oldR != null) {
+            rInput.val(oldR);
+            rValidator.update(oldR);
+            this.#changeR(oldR);
+        }
     }
 }
 

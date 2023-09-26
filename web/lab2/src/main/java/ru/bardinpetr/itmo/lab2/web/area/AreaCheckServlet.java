@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import ru.bardinpetr.itmo.lab2.context.RequestContextHelper;
 import ru.bardinpetr.itmo.lab2.models.AreaConfig;
 import ru.bardinpetr.itmo.lab2.models.Point;
 import ru.bardinpetr.itmo.lab2.models.PointResult;
@@ -66,12 +67,16 @@ public class AreaCheckServlet extends HttpServlet {
             return;
         }
 
+        var user = RequestContextHelper.getUser(req);
+        if (user.isEmpty()) throw new ServletException("AreaCheckServlet ran without proper authentication");
+
         var input = inputCheckRequest.value().get();
         boolean response = service.checkInside(input);
 
         var executionTime = timer.measure();
         var res = new PointResult(
                 -1,
+                user.get().login(),
                 new Point(input.x(), input.y()),
                 new AreaConfig(input.r()),
                 response,

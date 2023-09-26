@@ -1,7 +1,7 @@
 package ru.bardinpetr.itmo.lab2.context;
 
 import jakarta.servlet.ServletRequest;
-import ru.bardinpetr.itmo.lab2.auth.user.JWTUserInfo;
+import ru.bardinpetr.itmo.lab2.models.User;
 
 import java.util.Optional;
 
@@ -15,7 +15,7 @@ public class RequestContextHelper {
         return Optional.ofNullable((T) context.getAttribute(attr));
     }
 
-    public static Optional<JWTUserInfo> getUser(ServletRequest context) {
+    public static Optional<User> getUser(ServletRequest context) {
         return get(context, CTX_ATTR_USER);
     }
 }

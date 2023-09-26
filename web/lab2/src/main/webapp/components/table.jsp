@@ -4,9 +4,6 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.function.Function" %>
-<jsp:useBean id="pointsDatabase" class="ru.bardinpetr.itmo.lab2.storage.impl.PointResultDatabase" scope="application"/>
-<jsp:useBean id="resultsModel" class="ru.bardinpetr.itmo.lab2.models.ResultsTableModel"/>
-<jsp:setProperty name="resultsModel" property="dao" value="${pointsDatabase}"/>
 
 <%
     DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
@@ -15,7 +12,9 @@
     pageContext.setAttribute("formatDouble", (Function<Double, String>) "%.3f"::formatted);
 %>
 
-<button id="clear-btn">Clear</button>
+<form class="inline-form" method="post" action="/app/db/clear">
+    <input type="submit" value="Clear" id="clear-btn">
+</form>
 <table id="table-result" class="data-table">
     <tr>
         <c:forEach var="cname" items="${['ID', 'Timestamp', 'Inside', 'R', 'X', 'Y', 'Execution Time, ms']}">

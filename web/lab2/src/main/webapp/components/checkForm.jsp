@@ -29,7 +29,7 @@
                         name="y"
                         type="text"
                         maxlength="9"
-                        placeholder="<x:rangeString range='${restrictions.YRange}' inclusive='${restrictions.YRangeInclusive}'/>"
+                        placeholder="<x:rangeString range='${restrictions.YRange}' inclusive='${restrictions.YInclusive}'/>"
                 >
             </td>
         </tr>
@@ -45,7 +45,7 @@
                         name="r"
                         type="text"
                         maxlength="10"
-                        placeholder="<x:rangeString range='${restrictions.RRange}' inclusive='${restrictions.RRangeInclusive}'/>"
+                        placeholder="<x:rangeString range='${restrictions.RRange}' inclusive='${restrictions.RInclusive}'/>"
                 >
             </td>
         </tr>

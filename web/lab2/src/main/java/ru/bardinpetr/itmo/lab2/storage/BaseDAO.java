@@ -2,6 +2,7 @@ package ru.bardinpetr.itmo.lab2.storage;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * Provides interface for handling requests over tables
@@ -23,4 +24,6 @@ public interface BaseDAO<K, R extends DBRow<K>> {
     Optional<R> get(K id);
 
     List<R> getAll();
+
+    void removeIf(Predicate<R> check);
 }

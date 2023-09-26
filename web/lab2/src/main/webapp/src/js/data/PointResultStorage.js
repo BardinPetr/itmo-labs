@@ -1,6 +1,8 @@
 import PointResult from "./PointResult.js";
 
 class PointResultStorage {
+    static #STORE_NAME_R = "last_r_val";
+
     #callbacks = {
         clear: [],
         insert: [],
@@ -19,9 +21,6 @@ class PointResultStorage {
         this.#callbacks[type].forEach((cb) => cb(data));
     }
 
-    #store(data) {
-    }
-
     clear() {
     }
 
@@ -38,6 +37,15 @@ class PointResultStorage {
     }
 
     add(data) {
+    }
+
+    setR(val) {
+        localStorage.setItem(PointResultStorage.#STORE_NAME_R, val);
+    }
+
+    getR() {
+        let data = localStorage.getItem(PointResultStorage.#STORE_NAME_R);
+        return data == null ? null : parseFloat(data);
     }
 }
 

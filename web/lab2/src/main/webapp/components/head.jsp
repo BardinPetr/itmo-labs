@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ page import="java.lang.String" %>
-<%@ page import="java.util.List" %>
 <%@ page import="java.util.Arrays" %>
 
 <c:set var="restrictions" value="${applicationScope.areaRestrictions}"/>
@@ -23,7 +22,8 @@
                 }
             },
             history: ${
-                pointsDatabase.all
+                resultsModel
+                    .list
                     .stream()
                     .map(i -> [i.id(), i.point().x(), i.point().y(), i.area().r(), i.isInside(), i.timestamp().getEpochSecond(), i.executionTime().toNanos()/1e6])
                     .toList()

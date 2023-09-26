@@ -7,6 +7,7 @@ import ru.bardinpetr.itmo.lab2.storage.DBRow;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * Provides interface for handling requests over tables
@@ -61,8 +62,14 @@ public class InMemoryDB<K, R extends DBRow<K>> implements BaseDAO<K, R> {
                 .filter(i -> i.getPrimaryKey().equals(id))
                 .findFirst();
     }
+
     @Override
     public List<R> getAll() {
         return list;
+    }
+
+    @Override
+    public void removeIf(Predicate<R> check) {
+        list.removeIf(check);
     }
 }

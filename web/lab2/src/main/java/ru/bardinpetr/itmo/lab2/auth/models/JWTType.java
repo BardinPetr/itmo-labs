@@ -7,7 +7,7 @@ import lombok.Getter;
 @Getter
 public enum JWTType {
     ACCESS(10, "kid-access", "app"),
-    REFRESH(30, "kid-refresh", "app-auth");
+    REFRESH(60 * 60, "kid-refresh", "app-auth");
 
     private final int expiry;
     private final String kid;
