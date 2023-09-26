@@ -4,12 +4,13 @@
 <%@ page import="java.util.Locale" %>
 <%@ page import="java.util.Date" %>
 <%@ page import="java.util.function.Function" %>
+<%@ page import="ru.bardinpetr.itmo.lab2.utils.PresentationUtils" %>
 
 <%
     DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, Locale.getDefault());
 
     pageContext.setAttribute("formatDate", (Function<Instant, String>) (i) -> formatter.format(new Date(i.toEpochMilli())));
-    pageContext.setAttribute("formatDouble", (Function<Double, String>) "%.3f"::formatted);
+    pageContext.setAttribute("formatDouble", (Function<Double, String>) (i) -> PresentationUtils.printDoubleFixedFloor(i, 3));
 %>
 
 <form class="inline-form" method="post" action="/app/db/clear">

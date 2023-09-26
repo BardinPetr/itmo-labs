@@ -8,3 +8,9 @@ export const isFloat = (x) => /^\-?\d+(\.\d+)?$/.test(x);
 export const id = (el) => el.prop("id");
 
 export const absMax = (...arr) => Math.max(...arr.map((i) => Math.abs(i)));
+
+export function toFixedString(val, len) {
+    let [dec, frac] = val.toString().split('.');
+    if (frac == null) return dec;
+    return `${dec}.${frac.substring(0, Math.min(len, frac.length))}`
+}

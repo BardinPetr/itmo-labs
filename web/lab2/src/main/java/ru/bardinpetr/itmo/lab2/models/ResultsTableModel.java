@@ -3,12 +3,13 @@ package ru.bardinpetr.itmo.lab2.models;
 import lombok.Setter;
 import ru.bardinpetr.itmo.lab2.storage.impl.PointResultDatabase;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ResultsTableModel {
+public class ResultsTableModel implements Serializable {
     @Setter
     private PointResultDatabase dao;
     @Setter
