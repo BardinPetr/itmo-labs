@@ -15,6 +15,7 @@
     pageContext.setAttribute("formatDouble", (Function<Double, String>) "%.3f"::formatted);
 %>
 
+<button id="clear-btn">Clear</button>
 <table id="table-result" class="data-table">
     <tr>
         <c:forEach var="cname" items="${['ID', 'Timestamp', 'Inside', 'R', 'X', 'Y', 'Execution Time, ms']}">

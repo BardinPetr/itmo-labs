@@ -13,7 +13,7 @@ public class AppInitializer implements ServletContainerInitializer {
     public void onStartup(Set<Class<?>> c, ServletContext ctx) {
         log.warn("Initializing root router servlet");
 
-        var appRouter = new AppRouterServlet(ctx);
+        var appRouter = new ControllerServlet(ctx);
 
         var mainServlet = ctx.addServlet("routerServlet", appRouter);
         mainServlet.addMapping("/*");

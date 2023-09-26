@@ -7,7 +7,7 @@
 
 <head>
     <title>Lab 2</title>
-    <link rel="stylesheet" href="static/dist/MainPage.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/static/dist/style/MainPage.css">
 
     <script>
         window.lab = {
@@ -30,5 +30,5 @@
             }
         }
     </script>
-    <script src="static/dist/MainPage.js"></script>
+    <script src="${pageContext.request.contextPath}/static/dist/js/views/MainPage.js"></script>
 </head>

@@ -55,3 +55,12 @@ span[id^="error-msg"] {
 #send-btn {
   width: 100%;
 }
+
+.user-display {
+  @include reset
+}
+
+.inline-form {
+  margin: 0;
+  display: inline;
+}

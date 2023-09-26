@@ -2,8 +2,8 @@ package ru.bardinpetr.itmo.lab2.web.auth.dto.serdes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import ru.bardinpetr.itmo.lab2.utils.MapUtils;
+import ru.bardinpetr.itmo.lab2.utils.dto.HttpRequestDeserializer;
 import ru.bardinpetr.itmo.lab2.web.auth.dto.LoginRequestDTO;
-import ru.bardinpetr.itmo.lab2.web.dto.serdes.HttpRequestDeserializer;
 
 import java.util.List;
 import java.util.Optional;

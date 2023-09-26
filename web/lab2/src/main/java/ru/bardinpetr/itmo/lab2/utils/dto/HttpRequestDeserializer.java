@@ -1,4 +1,4 @@
-package ru.bardinpetr.itmo.lab2.web.dto.serdes;
+package ru.bardinpetr.itmo.lab2.utils.dto;
 
 import jakarta.servlet.http.HttpServletRequest;
 

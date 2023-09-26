@@ -1,5 +1,3 @@
-import "../../style/MainPage.scss"
-
 import "../utils/jquery.js";
 import * as C from "../utils/constants.js";
 import {absMax} from "../utils/utils.js";

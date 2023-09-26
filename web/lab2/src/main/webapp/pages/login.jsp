@@ -1,7 +1,16 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+<c:set var="basePath" value="${pageContext.request.contextPath}"/>
+
+<c:if test="${requestScope.user != null}">
+    <c:redirect url="/index.jsp"/>
+</c:if>
+
 <html>
 <head>
     <title>Login</title>
+    <link rel="stylesheet" href="${basePath}/static/dist/style/ErrorPage.css">
 </head>
 <body>
 <form method="POST">

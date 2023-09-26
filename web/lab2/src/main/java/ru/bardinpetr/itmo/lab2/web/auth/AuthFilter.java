@@ -39,46 +39,63 @@ public class AuthFilter extends HttpFilter {
         this.db = db.get();
     }
 
-    @Override
-    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        chain.doFilter(req, res);
-
+    private boolean checkPublic(HttpServletRequest req) {
         var publicPaths = AppContextHelper.getPublicPaths(getServletContext());
         if (publicPaths.isPresent()) {
             var predicate = predicateAny(publicPaths.get());
             var path = getUri(req);
-            if (predicate.test(path)) {
-                log.info("Request to {} continued as public route", path);
-                chain.doFilter(req, res);
-                return;
-            }
+            return predicate.test(path);
         }
+        return false;
+    }
+
+    @Override
+    protected void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+        var isPublic = checkPublic(req);
 
         var jwtPair = AuthInjector.extract(req);
 
         if (jwtPair.getPreferableToken().isEmpty()) {
-            res.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: No tokens present");
+            if (isPublic) {
+                chain.doFilter(req, res);
+                return;
+            }
+            sendError(req, res, HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized: No tokens present");
             return;
         }
 
         var authResponse = jwtService.authenticate(jwtPair);
         if (!authResponse.isAuthenticated() || authResponse.subject().isEmpty()) {
-            res.sendError(HttpServletResponse.SC_FORBIDDEN, "Unauthorized: Tokens are invalid");
+            if (isPublic) {
+                chain.doFilter(req, res);
+                return;
+            }
+            sendError(req, res, HttpServletResponse.SC_FORBIDDEN, "Unauthorized: Tokens are invalid");
             return;
         }
         JWTUserInfo user = authResponse.subject().get();
 
         var dbUser = db.get(user.username());
         if (dbUser.isEmpty()) {
-            res.sendError(HttpServletResponse.SC_FORBIDDEN, "Forbidden: User does not exist");
+            if (isPublic) {
+                chain.doFilter(req, res);
+                return;
+            }
+            sendError(req, res, HttpServletResponse.SC_FORBIDDEN, "Forbidden: User does not exist");
             return;
         }
 
         if (authResponse.update().isPresent())
             AuthInjector.inject(res, authResponse.update().get());
 
-        req.setAttribute(RequestContextHelper.CTX_ATTR_USER, dbUser);
+        req.setAttribute(RequestContextHelper.CTX_ATTR_USER, dbUser.get());
 
         chain.doFilter(req, res);
+    }
+
+    private void sendError(HttpServletRequest req, HttpServletResponse res, int error, String msg) throws IOException, ServletException {
+        req.setAttribute("jakarta.servlet.error.message", msg);
+        res.setStatus(error);
+        req.getRequestDispatcher("/error.jsp").forward(req, res);
     }
 }

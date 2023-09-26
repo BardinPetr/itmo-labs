@@ -56,11 +56,6 @@ public class RouterServlet extends HttpServlet {
 
     private Optional<RequestDispatcher> resolveDispatcher(HttpServletRequest req, HttpServletResponse resp) {
         Optional<RequestDispatcher> dispatcher;
-
-//        dispatcher = resolveJSP(req, resp);
-//        if (dispatcher.isPresent())
-//            return dispatcher;
-
         dispatcher = resolveServlet(req, resp);
         return dispatcher;
     }
@@ -83,21 +78,6 @@ public class RouterServlet extends HttpServlet {
                 getServletContext().getNamedDispatcher(target)
         );
     }
-
-//    private Optional<RequestDispatcher> resolveJSP(HttpServletRequest req, HttpServletResponse resp) {
-//        var handler = jspRoutes
-//                .stream()
-//                .filter(i -> i.test(req.()))
-//                .findFirst();
-//
-//        if (handler.isEmpty())
-//            return Optional.empty();
-//
-//        var target = handler.get().identifier();
-//        return Optional.ofNullable(
-//                getServletContext().getRequestDispatcher(target)
-//        );
-//    }
 
     /**
      * Register url route for servlet
@@ -136,12 +116,24 @@ public class RouterServlet extends HttpServlet {
      * @param jspPath    string uri for getting dispatcher
      */
     protected ServletRegistration.Dynamic use(ServletContext ctx, String uri, boolean authorized, String jspPath) {
+        return use(ctx, uri, List.of(HTTPMethod.GET), authorized, jspPath);
+    }
+
+    /**
+     * Register paths for serving JSPs
+     *
+     * @param ctx        uninitialized servlet context
+     * @param uri        url to resource
+     * @param authorized if true, authentication filter will be used
+     * @param jspPath    string uri for getting dispatcher
+     */
+    protected ServletRegistration.Dynamic use(ServletContext ctx, String uri, List<HTTPMethod> methods, boolean authorized, String jspPath) {
         var name = String.join("", jspPath.split("\\W"));
         var dynamic = ctx.addJspFile(name, jspPath);
 
         var descriptor = new RouteDescriptor(List.of(uri), name);
 
-        servletRoutesByType.get(HTTPMethod.GET).add(descriptor);
+        methods.forEach(m -> servletRoutesByType.get(m).add(descriptor));
 
         if (!authorized)
             makePublic(ctx, descriptor.allMatchPredicates());

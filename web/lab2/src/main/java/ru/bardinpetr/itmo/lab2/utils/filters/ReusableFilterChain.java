@@ -1,4 +1,4 @@
-package ru.bardinpetr.itmo.lab2.filters;
+package ru.bardinpetr.itmo.lab2.utils.filters;
 
 import jakarta.servlet.*;
 
