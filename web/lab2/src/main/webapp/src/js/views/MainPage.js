@@ -107,7 +107,7 @@ class MainPage {
 
 
         let oldR = this.#store.getR();
-        if (oldR != null) {
+        if (oldR != null && !isNaN(oldR)) {
             rInput.val(oldR);
             rValidator.update(oldR);
             this.#changeR(oldR);
