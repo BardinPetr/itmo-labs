@@ -4,7 +4,8 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import jakarta.persistence.criteria.CriteriaBuilder;
-import ru.bardinpetr.itmo.lab3.data.beans.EntityManagerProvider;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.Optional;
@@ -16,15 +17,17 @@ import java.util.Optional;
  * @param <T>  Row type
  */
 public abstract class DAO<PK, T> {
-
-    private final EntityManager manager;
-    private final CriteriaBuilder criteriaBuilder;
+    @Setter
+    @Getter
+    private EntityManager manager;
     private final Class<T> rowClass;
 
-    public DAO(EntityManagerProvider entityManagerProvider, Class<T> rowClass) {
+    public DAO(Class<T> rowClass) {
         this.rowClass = rowClass;
-        manager = entityManagerProvider.getEntityManager();
-        criteriaBuilder = manager.getCriteriaBuilder();
+    }
+
+    protected CriteriaBuilder getCriteriaBuilder() {
+        return getManager().getCriteriaBuilder();
     }
 
     /**
@@ -47,9 +50,9 @@ public abstract class DAO<PK, T> {
      * @return optional of found row
      */
     public Optional<T> fetch(PK id, List<String> fetchColumns) {
-        var crit = criteriaBuilder.createQuery(rowClass);
+        var crit = getCriteriaBuilder().createQuery(rowClass);
         var base = crit.from(rowClass);
-        crit.where(criteriaBuilder.equal(base.get("id"), id));
+        crit.where(getCriteriaBuilder().equal(base.get("id"), id));
         fetchColumns.forEach(base::fetch);
         var query = manager.createQuery(crit);
         query.setMaxResults(1);
@@ -66,9 +69,9 @@ public abstract class DAO<PK, T> {
      * @return entities list
      */
     public <U> List<T> findMatching(String column, U value) {
-        var crit = criteriaBuilder.createQuery(rowClass);
+        var crit = getCriteriaBuilder().createQuery(rowClass);
         var base = crit.from(rowClass);
-        crit.where(criteriaBuilder.equal(base.get(column), value));
+        crit.where(getCriteriaBuilder().equal(base.get(column), value));
         var query = manager.createQuery(crit);
         return query.getResultList();
     }
@@ -79,7 +82,7 @@ public abstract class DAO<PK, T> {
      * @return entities list
      */
     public List<T> findAll() {
-        var crit = criteriaBuilder.createQuery(rowClass);
+        var crit = getCriteriaBuilder().createQuery(rowClass);
         crit.from(rowClass);
         var query = manager.createQuery(crit);
         return query.getResultList();
@@ -91,7 +94,7 @@ public abstract class DAO<PK, T> {
      * @param data entity to insert
      * @return true if inserted successfully else false
      */
-    boolean insert(T data) {
+    public boolean insert(T data) {
         manager.getTransaction().begin();
         try {
             manager.persist(data);
@@ -109,7 +112,7 @@ public abstract class DAO<PK, T> {
      * @param data entity to update
      * @return true if updated successfully else false
      */
-    boolean update(T data) {
+    public boolean update(T data) {
         manager.getTransaction().begin();
         try {
             manager.merge(data);
@@ -127,7 +130,7 @@ public abstract class DAO<PK, T> {
      * @param id primary key of entity
      * @return true if removed successfully else false
      */
-    boolean delete(PK id) {
+    public boolean delete(PK id) {
         var entity = find(id);
         if (entity.isEmpty())
             return false;

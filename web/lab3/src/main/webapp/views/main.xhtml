@@ -13,8 +13,9 @@
     <ui:composition template="common.xhtml">
         <ui:define name="content">
             <p>#{userDAO.getPointResults(userDAO.findByLogin("1").get().id)}</p>
-            <h:button title="">
-            </h:button>
+            <h:form>
+                <h:commandButton action="#{userRepo.demo()}" value = "ADD"></h:commandButton>
+            </h:form>
         </ui:define>
     </ui:composition>
 </h:body>

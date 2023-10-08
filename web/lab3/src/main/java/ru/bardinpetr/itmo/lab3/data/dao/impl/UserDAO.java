@@ -1,5 +1,6 @@
 package ru.bardinpetr.itmo.lab3.data.dao.impl;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -9,17 +10,25 @@ import ru.bardinpetr.itmo.lab3.data.dao.DAO;
 import ru.bardinpetr.itmo.lab3.data.models.PointResult;
 import ru.bardinpetr.itmo.lab3.data.models.User;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Optional;
 
 @Data
 @Named("userDAO")
 @ApplicationScoped
-public class UserDAO extends DAO<Long, User> {
+public class UserDAO extends DAO<Long, User> implements Serializable {
 
     @Inject
-    public UserDAO(EntityManagerProvider entityManagerProvider) {
-        super(entityManagerProvider, User.class);
+    private EntityManagerProvider entityManagerProvider;
+
+    public UserDAO() {
+        super(User.class);
+    }
+
+    @PostConstruct
+    public void init() {
+        setManager(entityManagerProvider.getEntityManager());
     }
 
     public Optional<User> findByLogin(String login) {
