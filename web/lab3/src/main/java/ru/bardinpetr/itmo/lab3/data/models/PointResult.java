@@ -1,8 +1,8 @@
 package ru.bardinpetr.itmo.lab3.data.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import ru.bardinpetr.itmo.lab3.data.models.area.AreaConfig;
 
 import java.io.Serializable;
 import java.time.Duration;
@@ -16,14 +16,10 @@ public class PointResult implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-//    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "owner_id", nullable = false)
-//    private User owner;
-
     @Embedded
     private Point point;
 
-    @ManyToOne(optional = false, cascade = CascadeType.PERSIST)
+    @Embedded
     private AreaConfig area;
 
     @Column(nullable = false)

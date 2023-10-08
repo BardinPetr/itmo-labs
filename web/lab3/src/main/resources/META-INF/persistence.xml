@@ -7,13 +7,10 @@
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <jta-data-source>java:/app/db/PostgresDS</jta-data-source>
 
-    <class>ru.bardinpetr.itmo.lab3.data.models.AreaConfig</class>
     <class>ru.bardinpetr.itmo.lab3.data.models.PointResult</class>
     <class>ru.bardinpetr.itmo.lab3.data.models.User</class>
 
-    <class>ru.bardinpetr.itmo.lab3.data.models.utils.DurationConverter</class>
-
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <class>ru.bardinpetr.itmo.lab3.data.utils.DurationConverter</class>
 
     <properties>
       <property name="eclipselink.ddl-generation" value="create-tables"/>

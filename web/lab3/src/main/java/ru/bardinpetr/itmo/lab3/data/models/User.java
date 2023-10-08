@@ -1,16 +1,13 @@
 package ru.bardinpetr.itmo.lab3.data.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Data
@@ -18,18 +15,21 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "APP_USER")
+@NamedQuery(
+        name = "findUser",
+        query = "select u from User u where u.login = :login"
+)
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @Column(nullable = false, unique = true)
     private String login;
 
-    @NotNull
+    @Column(nullable = false)
     private String passwordHash;
 
-    @NotNull
     private String role;
 
     @OneToMany(cascade = CascadeType.ALL)
