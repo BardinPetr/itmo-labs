@@ -1,4 +1,4 @@
-package ru.bardinpetr.itmo.lab3.data.models.constraints;
+package ru.bardinpetr.itmo.lab3.data.validators.range.models;
 
 import java.io.Serializable;
 

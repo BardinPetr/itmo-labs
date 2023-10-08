@@ -5,12 +5,10 @@ import jakarta.persistence.Persistence;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
-import jakarta.validation.Validation;
-import ru.bardinpetr.itmo.lab3.data.dto.PointCheckRequestDTO;
 import ru.bardinpetr.itmo.lab3.data.models.Point;
 import ru.bardinpetr.itmo.lab3.data.models.PointResult;
 import ru.bardinpetr.itmo.lab3.data.models.User;
-import ru.bardinpetr.itmo.lab3.data.models.area.AreaConfig;
+import ru.bardinpetr.itmo.lab3.data.models.AreaConfig;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -20,22 +18,7 @@ public class AppContextInitializer implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-//        var f = Validation.buildDefaultValidatorFactory();
-//        var val = f.getValidator();
-//
-//        var rq = new PointCheckRequestDTO();
-//        rq.setR(0.0);
-//        rq.setX(5.0);
-//        rq.setY(3.0);
-//
-//        rq.setX(5.0);
-//        System.out.println(val.validate(rq));
-//
-//        rq.setX(0.0);
-//        System.out.println(val.validate(rq));
-//
-//        rq.setX(11.0);
-//        System.out.println(val.validate(rq).iterator().next().getMessage());
+
 
         EntityManager m = Persistence.createEntityManagerFactory("lab3").createEntityManager();
         User u1 = new User();

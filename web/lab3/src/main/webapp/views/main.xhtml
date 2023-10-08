@@ -12,6 +12,7 @@
 <h:body>
     <ui:composition template="common.xhtml">
         <ui:define name="content">
+            <p>#{areaPolygon.predicate}</p>
             <p>#{userDAO.getPointResults(userDAO.findByLogin("1").get().id)}</p>
             <h:form>
                 <h:commandButton action="#{userRepo.demo()}" value = "ADD"></h:commandButton>

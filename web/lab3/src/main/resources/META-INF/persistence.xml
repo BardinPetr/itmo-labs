@@ -10,7 +10,7 @@
     <class>ru.bardinpetr.itmo.lab3.data.models.PointResult</class>
     <class>ru.bardinpetr.itmo.lab3.data.models.User</class>
 
-    <class>ru.bardinpetr.itmo.lab3.data.utils.DurationConverter</class>
+    <class>ru.bardinpetr.itmo.lab3.data.converters.DurationConverter</class>
 
     <properties>
       <property name="eclipselink.ddl-generation" value="create-tables"/>

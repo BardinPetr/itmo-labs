@@ -1,4 +1,4 @@
-package ru.bardinpetr.itmo.lab3.data.utils;
+package ru.bardinpetr.itmo.lab3.data.converters;
 
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;

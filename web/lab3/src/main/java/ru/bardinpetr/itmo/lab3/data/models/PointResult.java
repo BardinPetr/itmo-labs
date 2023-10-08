@@ -2,7 +2,6 @@ package ru.bardinpetr.itmo.lab3.data.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import ru.bardinpetr.itmo.lab3.data.models.area.AreaConfig;
 
 import java.io.Serializable;
 import java.time.Duration;

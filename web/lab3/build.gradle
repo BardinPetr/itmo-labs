@@ -42,7 +42,7 @@ dependencies {
   // Beans
   implementation 'jakarta.enterprise:jakarta.enterprise.cdi-api:3.0.0'
   implementation 'org.jboss.weld.se:weld-se-core:4.0.3.Final'
-//  implementation 'jakarta.annotation:jakarta.annotation-api:2.0.0'
+  implementation 'jakarta.annotation:jakarta.annotation-api:2.0.0'
 
   // validation
   compileOnly 'jakarta.validation:jakarta.validation-api:3.0.0'

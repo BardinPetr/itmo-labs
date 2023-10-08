@@ -1,4 +1,4 @@
-package ru.bardinpetr.itmo.lab3.data.models.area;
+package ru.bardinpetr.itmo.lab3.data.models;
 
 import jakarta.persistence.Embeddable;
 import lombok.Data;

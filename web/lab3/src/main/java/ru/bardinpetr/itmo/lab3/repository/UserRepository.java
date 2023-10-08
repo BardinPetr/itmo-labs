@@ -8,7 +8,7 @@ import ru.bardinpetr.itmo.lab3.data.dao.impl.UserDAO;
 import ru.bardinpetr.itmo.lab3.data.models.Point;
 import ru.bardinpetr.itmo.lab3.data.models.PointResult;
 import ru.bardinpetr.itmo.lab3.data.models.User;
-import ru.bardinpetr.itmo.lab3.data.models.area.AreaConfig;
+import ru.bardinpetr.itmo.lab3.data.models.AreaConfig;
 
 import java.io.Serializable;
 import java.time.Duration;

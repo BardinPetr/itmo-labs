@@ -1,16 +1,18 @@
 package ru.bardinpetr.itmo.lab3.data.dto;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import lombok.Data;
+import ru.bardinpetr.itmo.lab3.data.validators.range.RangeExternalValidated;
 
 import java.io.Serializable;
 
+import static ru.bardinpetr.itmo.lab3.data.beans.PointConstraints.ConstraintType;
+
 @Data
 public class PointCheckRequestDTO implements Serializable {
-    @Min(value = 1)
-    @Max(value = 10)
+    @RangeExternalValidated(ConstraintType.X)
     private Double x;
+    @RangeExternalValidated(ConstraintType.Y)
     private Double y;
+    @RangeExternalValidated(ConstraintType.R)
     private Double r;
 }

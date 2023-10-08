@@ -1,34 +1,43 @@
 package ru.bardinpetr.itmo.lab3.data.validators.range;
 
+import jakarta.enterprise.inject.spi.CDI;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import ru.bardinpetr.itmo.lab3.context.ContextUtils;
-import ru.bardinpetr.itmo.lab3.data.models.constraints.DoubleRange;
+import ru.bardinpetr.itmo.lab3.data.beans.PointConstraints;
+import ru.bardinpetr.itmo.lab3.data.validators.range.models.DoubleRange;
 
-import static ru.bardinpetr.itmo.lab3.data.models.constraints.RangeType.INCLUSIVE;
+import static ru.bardinpetr.itmo.lab3.data.validators.range.models.RangeType.INCLUSIVE;
 
 public class RangeExternalValidator implements ConstraintValidator<RangeExternalValidated, Double> {
-    private String expression;
+    private DoubleRange range;
 
     @Override
     public void initialize(RangeExternalValidated constraintAnnotation) {
-        expression = constraintAnnotation.rangeSource();
+        var constraints = CDI.current().select(PointConstraints.class).get();
+        range = constraints.getByType(constraintAnnotation.value());
         ConstraintValidator.super.initialize(constraintAnnotation);
-    }
-
-    private DoubleRange getRange() {
-        var res = ContextUtils.evaluateExpression(DoubleRange.class, expression);
-        if (res.isEmpty())
-            throw new RuntimeException("RangeExternalValidator initialization failed: not found range bean");
-        return res.get();
     }
 
     @Override
     public boolean isValid(Double value, ConstraintValidatorContext context) {
-        var range = getRange();
+        if (value == null) {
+            context
+                    .buildConstraintViolationWithTemplate("Value is null")
+                    .addConstraintViolation();
+            return false;
+        }
         var minCheck = value.compareTo(range.getMin());
         var maxCheck = value.compareTo(range.getMax());
-        return (range.getMinType() == INCLUSIVE ? minCheck >= 0 : minCheck > 0) &&
+        var res = (range.getMinType() == INCLUSIVE ? minCheck >= 0 : minCheck > 0) &&
                 (range.getMaxType() == INCLUSIVE ? maxCheck <= 0 : maxCheck < 0);
+        if (!res) {
+            context.disableDefaultConstraintViolation();
+            context
+                    .buildConstraintViolationWithTemplate("Value {value}=%.2f not in range %s".formatted(value, range))
+                    .addConstraintViolation();
+            return false;
+        }
+
+        return true;
     }
 }
