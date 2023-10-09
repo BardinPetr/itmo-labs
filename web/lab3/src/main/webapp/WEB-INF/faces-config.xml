@@ -4,6 +4,10 @@
 			  xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
                                   https://jakarta.ee/xml/ns/jakartaee/web-facesconfig_3_0.xsd">
 
+	<application>
+		<message-bundle>lab3</message-bundle>
+	</application>
+
 	<navigation-rule>
 		<from-view-id>views/login.xhtml</from-view-id>
 		<navigation-case>

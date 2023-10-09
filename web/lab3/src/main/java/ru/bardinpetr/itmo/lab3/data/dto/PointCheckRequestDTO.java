@@ -18,14 +18,12 @@ import static ru.bardinpetr.itmo.lab3.data.beans.PointConstraints.ConstraintType
 @RequestScoped
 @Data
 public class PointCheckRequestDTO implements Serializable {
+    @NotNull
     @RangeExternalValidated(ConstraintType.X)
-    @NotNull
     private Double x;
-    @RangeExternalValidated(ConstraintType.Y)
     @NotNull
+    @RangeExternalValidated(ConstraintType.Y)
     private Double y;
-
-    private LocalDateTime requestStartTime;
 
     public Set<ConstraintViolation<PointCheckRequestDTO>> validate() {
         try(var factory = Validation.buildDefaultValidatorFactory()) {

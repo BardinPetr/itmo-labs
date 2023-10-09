@@ -18,8 +18,8 @@ import static ru.bardinpetr.itmo.lab3.data.beans.PointConstraints.ConstraintType
 @Named("areaConfig")
 @SessionScoped
 public class AreaConfigDTO implements Serializable {
-    @RangeExternalValidated(ConstraintType.R)
     @NotNull
+    @RangeExternalValidated(ConstraintType.R)
     private Double r;
 
     @PostConstruct

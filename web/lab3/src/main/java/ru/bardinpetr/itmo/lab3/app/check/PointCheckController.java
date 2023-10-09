@@ -41,7 +41,7 @@ public class PointCheckController implements Serializable {
         log.info("User {} requested {} {}", user.getLogin(), requestDTO, areaPolygonController.getAreaConfigDTO());
 
         if (!areaValid.isEmpty() || !requestValid.isEmpty()) {
-            System.err.println("validation failed");
+            log.error("Validation failed for R{}/X{}/Y{}", areaPolygonController.getAreaConfigDTO().getR(), requestDTO.getX(), requestDTO.getY());
             return null;
         }
 

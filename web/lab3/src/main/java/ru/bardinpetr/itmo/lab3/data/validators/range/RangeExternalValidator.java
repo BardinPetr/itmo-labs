@@ -20,12 +20,9 @@ public class RangeExternalValidator implements ConstraintValidator<RangeExternal
 
     @Override
     public boolean isValid(Double value, ConstraintValidatorContext context) {
-        if (value == null) {
-            context
-                    .buildConstraintViolationWithTemplate("Value is null")
-                    .addConstraintViolation();
+        if (value == null)
             return false;
-        }
+
         var minCheck = value.compareTo(range.getMin());
         var maxCheck = value.compareTo(range.getMax());
         var res = (range.getMinType() == INCLUSIVE ? minCheck >= 0 : minCheck > 0) &&
