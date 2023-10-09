@@ -20,6 +20,10 @@ public class Point implements Serializable {
     private Double y;
 
     public Point scale(Double factor) {
-        return new Point(x * factor, y * factor);
+        return Point.of(x * factor, y * factor);
+    }
+
+    public static Point of(@NotNull Double x, @NotNull Double y) {
+        return new Point(x, y);
     }
 }

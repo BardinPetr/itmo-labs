@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:l="http://lab3.itmo.bardinpetr.ru/facelets"
+>
+<f:view>
+    <p:commandButton
+            value="Clear"
+            update="pointTable"
+            action="#{pointRepo.removePoints(requestScope.user)}"
+    />
+
+    <p:dataTable
+            id="pointTable"
+            value="#{pointRepo.getCurrentPoints(requestScope.user, areaPolygon.config)}"
+            var="i"
+            rowIndexVar="idx"
+    >
+
+        <p:column headerText="ID">
+            <h:outputText value="#{idx+1}"/>
+        </p:column>
+        <p:column headerText="Timestamp">
+            <h:outputText value="#{i.timestamp}">
+                <f:convertDateTime type="localDateTime" dateStyle="medium"/>
+            </h:outputText>
+        </p:column>
+        <p:column headerText="Inside">
+            <h:outputText value="#{(i.getIsInside() ? '&#128309;' : '&#128308;')}"/>
+        </p:column>
+        <p:column headerText="R">
+            <l:tableCellDoubleFormat value="${i.area.r}"/>
+        </p:column>
+        <p:column headerText="X">
+            <l:tableCellDoubleFormat value="${i.point.x}"/>
+        </p:column>
+        <p:column headerText="Y">
+            <l:tableCellDoubleFormat value="${i.point.y}"/>
+        </p:column>
+        <p:column headerText="Execution Time, ms">
+            <l:tableCellDoubleFormat value="${i.executionTime.toNanos() / 1e6}"/>
+        </p:column>
+
+    </p:dataTable>
+</f:view>
+</html>

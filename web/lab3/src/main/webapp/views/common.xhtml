@@ -7,6 +7,10 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
 >
 <f:view contentType="text/html;charset=UTF-8" encoding="UTF-8">
+    <h:head>
+        <h:outputStylesheet library="primefaces" name="components.css"/>
+<!--        <h:outputStylesheet library="css" name="static/dist/style/MainPage.css"/>-->
+    </h:head>
     <h:body>
         <ui:insert name="header">
             <ui:include src="components/header.xhtml"/>

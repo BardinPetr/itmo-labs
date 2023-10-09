@@ -7,16 +7,16 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
 >
-<h:head>
-</h:head>
 <h:body>
     <ui:composition template="common.xhtml">
         <ui:define name="content">
-            <p>#{areaPolygon.predicate}</p>
-            <p>#{userDAO.getPointResults(userDAO.findByLogin("1").get().id)}</p>
+            #{pointRepo.getCurrentPoints(requestScope.user, areaPolygon.config)}
             <h:form>
-                <h:commandButton action="#{userRepo.demo()}" value = "ADD"></h:commandButton>
+                <h:commandButton action="#{pointCheckController.doCheck(requestScope.user)}" value = "ADD"/>
             </h:form>
+
+            <ui:include src="components/table.xhtml"/>
+
         </ui:define>
     </ui:composition>
 </h:body>

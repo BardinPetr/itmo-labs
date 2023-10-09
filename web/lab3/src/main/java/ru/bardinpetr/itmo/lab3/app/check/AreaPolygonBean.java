@@ -1,5 +1,6 @@
 package ru.bardinpetr.itmo.lab3.app.check;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -18,7 +19,13 @@ public class AreaPolygonBean implements Serializable {
     @Inject
     private PointCheckPredicate checkInsidePredicate;
     @NotNull
-    private AreaConfig config = new AreaConfig();
+    private AreaConfig config;
+
+    @PostConstruct
+    void init() {
+        config = new AreaConfig();
+        config.setR(1.0);
+    }
 
     public Predicate<Point> getPredicate() {
         if (checkInsidePredicate == null || config == null)

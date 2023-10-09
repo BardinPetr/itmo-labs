@@ -4,6 +4,7 @@ import lombok.Data;
 import ru.bardinpetr.itmo.lab3.data.validators.range.RangeExternalValidated;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import static ru.bardinpetr.itmo.lab3.data.beans.PointConstraints.ConstraintType;
 
@@ -15,4 +16,6 @@ public class PointCheckRequestDTO implements Serializable {
     private Double y;
     @RangeExternalValidated(ConstraintType.R)
     private Double r;
+
+    private final LocalDateTime requestStartTime = LocalDateTime.now();
 }
