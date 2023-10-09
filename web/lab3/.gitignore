@@ -43,3 +43,5 @@ bin/
 l2/
 
 node_modules/
+**/webapp/resources/css/
+**/webapp/resources/js/

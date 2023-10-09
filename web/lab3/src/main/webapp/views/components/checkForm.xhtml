@@ -4,67 +4,60 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:l="http://lab3.itmo.bardinpetr.ru/facelets"
+>
 <f:view>
     <div class="card">
         <h:form id="point-check-form">
             <div class="ui-fluid">
-                <!--                <div class="field">-->
-                <!--                    <p:outputLabel for="rInput" value="Select area polygon scale R"/>-->
-                <!--                    <br/>-->
-                <!--                    <h:inputText id="rInput" value="#{areaConfig.r}">-->
-                <!--                        <f:converter converterId="jakarta.faces.Double"/>-->
-                <!--&lt;!&ndash;                        <f:validateBean/>&ndash;&gt;-->
-                <!--                        <p:ajax update="display2" />-->
-                <!--                    </h:inputText>-->
-                <!--                    <p:slider-->
-                <!--                            for="rInput"-->
-                <!--                            minValue="#{pointConstraints.RRange.min}"-->
-                <!--                            maxValue="#{pointConstraints.RRange.max}"-->
-                <!--                            step="0.25"-->
-                <!--                    />-->
-                <!--                    <small id="rInput-help">Range: #{pointConstraints.RRange.toString()}</small>-->
-                <!--                    <h:message for="rInput"/>-->
-                <!--                </div>-->
-                <!--                <div class="field">-->
-                <!--                    <p:outputLabel for="xInput" value="Select X"/>-->
-                <!--                    <p:spinner-->
-                <!--                            id="xInput"-->
-                <!--                            value="#{pointCheckRequest.x}"-->
-                <!--                            min="#{pointConstraints.XRange.min}"-->
-                <!--                            max="#{pointConstraints.XRange.max}"-->
-                <!--                            stepFactor="0.1">-->
-                <!--                        <f:validateBean/>-->
-                <!--                        <p:ajax update="display" />-->
-                <!--                    </p:spinner>-->
-                <!--                    <small id="xInput-help">Point X coordinate. Range: #{pointConstraints.XRange.toString()}</small>-->
-                <!--                    <h:message for="xInput"/>-->
-                <!--                </div>-->
-                <!--                <div class="field">-->
-                <!--                    <p:outputLabel for="yInput" value="Enter Y"/>-->
-                <!--                    <p:inputText id="yInput" required="true" value="#{pointCheckRequest.y}">-->
-                <!--                        <f:converter converterId="jakarta.faces.Double"/>-->
-                <!--                        <f:validateBean/>-->
-                <!--&lt;!&ndash;                        <p:clientValidator />&ndash;&gt;-->
-                <!--&lt;!&ndash;                        <f:validateDoubleRange minimum="#{pointConstraints.YRange.min}" maximum="#{pointConstraints.YRange.max}"/>&ndash;&gt;-->
 
-                <!--                        <p:ajax update="display" event="keyup"/>-->
-                <!--                    </p:inputText>-->
-                <!--                    <small id="yInput-help">Point Y coordinate. Range: #{pointConstraints.YRange.toString()}</small>-->
-                <!--                    <h:message for="yInput"/>-->
-                <!--                </div>-->
+                <div class="field">
+                    <p:outputLabel for="rInput" value="Select area polygon scale R"/>
+                    <br/>
+                    <p:inputText id="rInput" value="#{areaConfig.r}">
+                        <f:converter converterId="jakarta.faces.Double"/>
+                        <p:ajax update="point-check-form:sendBtn" event="keyup"/>
+                    </p:inputText>
+                    <p:slider
+                            for="rInput"
+                            minValue="#{pointConstraints.RRange.min}"
+                            maxValue="#{pointConstraints.RRange.max}"
+                            step="0.25"
+                    >
+                        <p:ajax process="rInput" update="point-check-form:sendBtn" event="slideEnd"/>
+                    </p:slider>
+                    <l:updatableMessage for="rInput"/>
+                    <small id="rInput-help">Range: #{pointConstraints.RRange.toString()}</small>
+                </div>
 
-                <h:outputText id="display2" value="#{areaConfig.r}"/>
-                <p:inputText id="rInput" value="#{areaConfig.r}">
-                    <f:converter converterId="jakarta.faces.Double"/>
-                    <p:ajax update="point-check-form" event="keyup"/>
-                </p:inputText>
-                <p:message for="rInput" showDetail="false">
-                    <p:autoUpdate/>
-                </p:message>
-                <h:outputText id="m" value="#{facesContext.clientIdsWithMessages.hasNext() ? facesContext.clientIdsWithMessages.next() : 'null'}"/>
+                <div class="field">
+                    <p:outputLabel for="xInput" value="Select X"/>
+                    <p:spinner
+                            id="xInput"
+                            value="#{pointCheckRequest.x}"
+                            min="#{pointConstraints.XRange.min}"
+                            max="#{pointConstraints.XRange.max}"
+                            stepFactor="0.1">
+                        <l:ajaxPushForm form="point-check-form" update="sendBtn" event="keyup"/>
+                        <l:ajaxPushForm form="point-check-form" update="sendBtn" event="valueChange"/>
+                    </p:spinner>
+                    <l:updatableMessage for="xInput"/>
+                    <small id="xInput-help">Point X coordinate. Range: #{pointConstraints.XRange.toString()}</small>
+                </div>
+
+                <div class="field">
+                    <p:outputLabel for="yInput" value="Enter Y"/>
+                    <p:inputText id="yInput" required="true" value="#{pointCheckRequest.y}">
+                        <f:converter converterId="jakarta.faces.Double"/>
+                        <l:ajaxPushForm form="point-check-form" update="sendBtn" event="keyup"/>
+                    </p:inputText>
+                    <l:updatableMessage for="yInput"/>
+                    <small id="yInput-help">Point Y coordinate. Range: #{pointConstraints.YRange.toString()}</small>
+                </div>
 
                 <p:commandButton
+                        id="sendBtn"
                         value="Check"
                         disabled="#{!checkUtils.isFormValid('point-check-form')}"
                         action="#{pointCheckController.doCheck()}"

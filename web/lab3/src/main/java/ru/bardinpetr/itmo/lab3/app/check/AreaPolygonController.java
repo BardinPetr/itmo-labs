@@ -13,19 +13,13 @@ import java.io.Serializable;
 import java.util.function.Predicate;
 
 @Data
-@Named("areaPolygon")
+@Named("areaPolygonController")
 @SessionScoped
 public class AreaPolygonController implements Serializable {
     @Inject
     private PointCheckPredicate checkInsidePredicate;
     @Inject
     private AreaConfigDTO areaConfigDTO;
-
-    @PostConstruct
-    void init() {
-        areaConfigDTO = new AreaConfigDTO();
-        areaConfigDTO.setR(1.0);
-    }
 
     public AreaConfig getAreaConfig() {
         var conf = new AreaConfig();

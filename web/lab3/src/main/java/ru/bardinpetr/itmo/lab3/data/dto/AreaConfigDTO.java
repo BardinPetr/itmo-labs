@@ -1,5 +1,6 @@
 package ru.bardinpetr.itmo.lab3.data.dto;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Named;
 import jakarta.validation.ConstraintViolation;
@@ -13,16 +14,21 @@ import java.util.Set;
 
 import static ru.bardinpetr.itmo.lab3.data.beans.PointConstraints.ConstraintType;
 
+@Data
 @Named("areaConfig")
 @SessionScoped
-@Data
 public class AreaConfigDTO implements Serializable {
     @RangeExternalValidated(ConstraintType.R)
     @NotNull
-    private Double r = 1D;
+    private Double r;
+
+    @PostConstruct
+    void init() {
+        r = 2.0;
+    }
 
     public Set<ConstraintViolation<AreaConfigDTO>> validate() {
-        try(var factory = Validation.buildDefaultValidatorFactory()) {
+        try (var factory = Validation.buildDefaultValidatorFactory()) {
             return factory.getValidator().validate(this);
         }
     }
