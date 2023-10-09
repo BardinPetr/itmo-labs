@@ -10,11 +10,11 @@
 <h:body>
     <ui:composition template="common.xhtml">
         <ui:define name="content">
-            #{pointRepo.getCurrentPoints(requestScope.user, areaPolygon.config)}
             <h:form>
-                <h:commandButton action="#{pointCheckController.doCheck(requestScope.user)}" value = "ADD"/>
+                <h:commandButton action="#{pointCheckController.test()}" value = "ADD"/>
             </h:form>
 
+            <ui:include src="components/checkForm.xhtml"/>
             <ui:include src="components/table.xhtml"/>
 
         </ui:define>

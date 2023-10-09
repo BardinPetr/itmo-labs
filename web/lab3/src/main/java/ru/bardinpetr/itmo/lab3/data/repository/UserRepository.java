@@ -1,4 +1,4 @@
-package ru.bardinpetr.itmo.lab3.repository;
+package ru.bardinpetr.itmo.lab3.data.repository;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;

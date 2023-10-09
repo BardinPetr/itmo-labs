@@ -1,6 +1,6 @@
 package ru.bardinpetr.itmo.lab3.data.dto;
 
-import jakarta.enterprise.context.RequestScoped;
+import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Named;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -9,25 +9,19 @@ import lombok.Data;
 import ru.bardinpetr.itmo.lab3.data.validators.range.RangeExternalValidated;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Set;
 
 import static ru.bardinpetr.itmo.lab3.data.beans.PointConstraints.ConstraintType;
 
-@Named("pointCheckRequest")
-@RequestScoped
+@Named("areaConfig")
+@SessionScoped
 @Data
-public class PointCheckRequestDTO implements Serializable {
-    @RangeExternalValidated(ConstraintType.X)
+public class AreaConfigDTO implements Serializable {
+    @RangeExternalValidated(ConstraintType.R)
     @NotNull
-    private Double x;
-    @RangeExternalValidated(ConstraintType.Y)
-    @NotNull
-    private Double y;
+    private Double r = 1D;
 
-    private LocalDateTime requestStartTime;
-
-    public Set<ConstraintViolation<PointCheckRequestDTO>> validate() {
+    public Set<ConstraintViolation<AreaConfigDTO>> validate() {
         try(var factory = Validation.buildDefaultValidatorFactory()) {
             return factory.getValidator().validate(this);
         }

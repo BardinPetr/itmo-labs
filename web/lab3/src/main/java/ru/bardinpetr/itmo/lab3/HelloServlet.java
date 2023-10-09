@@ -16,28 +16,6 @@ public class HelloServlet extends HttpServlet {
 
     public void init() {
         message = "Hello World!";
-
-        var f = Validation.buildDefaultValidatorFactory();
-        var val = f.getValidator();
-
-        var rq = new PointCheckRequestDTO();
-        rq.setR(0.0);
-        rq.setX(5.0);
-        rq.setY(3.0);
-
-        rq.setX(4.0);
-        System.err.println(val.validate(rq));
-        rq.setX(5.0);
-        System.err.println(val.validate(rq));
-        rq.setX(0.0);
-        System.err.println(val.validate(rq));
-        rq.setX(-5.0);
-        System.err.println(val.validate(rq));
-        rq.setX(-4.9999);
-        System.err.println(val.validate(rq));
-        rq.setX(11.0);
-        System.err.println(val.validate(rq));
-
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {

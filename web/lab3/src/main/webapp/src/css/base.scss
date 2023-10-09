@@ -1,6 +1,8 @@
 @use "input";
 @import "theme";
 
+@import 'primeflex/primeflex.scss';
+
 html {
   height: 100%;
 }
@@ -25,4 +27,9 @@ header {
 
   font: 20px cursive;
   color: #004;
+}
+
+.card {
+  padding: 1%;
+  margin: 1%;
 }

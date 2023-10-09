@@ -30,4 +30,6 @@ public class DoubleRange implements Serializable {
                 maxType == INCLUSIVE ? "]" : ")"
         );
     }
+
+
 }

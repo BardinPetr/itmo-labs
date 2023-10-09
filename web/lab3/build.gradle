@@ -91,5 +91,5 @@ tasks.named("build") { finalizedBy("wildflyDeploy") }
 war {
   exclude("src/**")
   duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
-//  dependsOn("yarn_build")
+  dependsOn("yarn_build")
 }

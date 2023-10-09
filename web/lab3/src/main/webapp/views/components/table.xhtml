@@ -11,12 +11,12 @@
     <p:commandButton
             value="Clear"
             update="pointTable"
-            action="#{pointRepo.removePoints(requestScope.user)}"
+            action="#{pointRepo.removePoints()}"
     />
 
     <p:dataTable
             id="pointTable"
-            value="#{pointRepo.getCurrentPoints(requestScope.user, areaPolygon.config)}"
+            value="#{pointRepo.getCurrentPoints()}"
             var="i"
             rowIndexVar="idx"
     >
