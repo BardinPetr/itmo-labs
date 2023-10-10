@@ -18,4 +18,10 @@ public class AreaConfig implements Serializable {
         AreaConfig that = (AreaConfig) o;
         return Math.abs(r - that.r) < EPSILON;
     }
+
+    public static AreaConfig of(Double r) {
+        var x = new AreaConfig();
+        x.setR(r);
+        return x;
+    }
 }

@@ -1,6 +1,5 @@
 package ru.bardinpetr.itmo.lab3.app.check;
 
-import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
@@ -22,14 +21,12 @@ public class AreaPolygonController implements Serializable {
     private AreaConfigDTO areaConfigDTO;
 
     public AreaConfig getAreaConfig() {
-        var conf = new AreaConfig();
-        conf.setR(areaConfigDTO.getR());
-        return conf;
+        return AreaConfig.of(areaConfigDTO.getR());
     }
 
     public Predicate<Point> getPredicate() {
         if (checkInsidePredicate == null || areaConfigDTO == null)
             return null;
-        return (Point x) -> checkInsidePredicate.test(x.scale(1 / getAreaConfig().getR()));
+        return (Point x) -> checkInsidePredicate.test(x.scale(1 / areaConfigDTO.getR()));
     }
 }

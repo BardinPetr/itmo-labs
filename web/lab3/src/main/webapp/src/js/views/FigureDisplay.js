@@ -1,4 +1,4 @@
-import PlotDisplay from "../ui/plot/PlotDisplay.js";
+import PlotDisplay from "../ui/PlotDisplay.js";
 
 class FigureDisplay extends PlotDisplay {
     #datastore;
@@ -6,31 +6,43 @@ class FigureDisplay extends PlotDisplay {
     constructor(canvas, datastore, onClick) {
         super(canvas, onClick);
 
-        datastore.on("clear", () => this.redraw());
-        datastore.on("insert", (data) => this.addPoint(data));
+        datastore.on("config", ({r}) => {
+            console.log(`New R value = ${r}`)
+            this.redraw();
+        })
+        datastore.on("insert", (point) => this.addPoint(point));
+        datastore.on("change", (pts) => {
+            console.log("Data changed")
+            this.redraw()
+            this.addPoints(pts);
+        })
         this.#datastore = datastore;
     }
 
     #preloadData() {
-        this.#datastore.get().forEach((data) => this.addPoint(data));
+        this.addPoints(this.#datastore.get());
     }
 
     setup(params) {
         super.setup(params);
     }
 
-    redraw(params) {
-        super.redraw(params);
+    redraw() {
+        super.redraw({});
 
-        const {R} = this._storedDrawParams;
+        const R = this.#datastore.getR();
         if (!R) return;
         this.#drawFigure(R);
         this.#preloadData();
     }
 
+    addPoints(pts) {
+        pts.forEach(x => this.addPoint(x));
+    }
+
     addPoint({x, y, r, result}) {
         const color =
-            r !== this._storedDrawParams.R
+            Math.abs(r - this.#datastore.getR()) > 1e-5
                 ? "#AAAAAADD"
                 : result
                     ? "#00FF00"
@@ -46,19 +58,18 @@ class FigureDisplay extends PlotDisplay {
 
             c.beginPath();
             c.moveTo(...this._toCanvas([0, 0]));
-            line(0, R / 2);
             line(R, 0);
-            line(R / 2, 0);
-            line(-R / 2, 0);
+            line(R, R / 2);
+            line(0, R / 2);
+            line(-R, 0);
+            line(-R/ 2, 0);
             c.arc(
                 ...this._toCanvas([0, 0]),
                 R * this._ratio / 2,
-                0,
+                Math.PI,
                 Math.PI / 2,
-                false
+                true
             );
-            line(-R, -R / 2);
-            line(-R, 0);
             c.closePath();
             c.fillStyle = "#DD00AAA0";
             c.fill();

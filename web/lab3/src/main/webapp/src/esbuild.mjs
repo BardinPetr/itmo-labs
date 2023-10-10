@@ -7,8 +7,7 @@ let ctx = await context({
     color: true,
     logLevel: "info",
     bundle: true,
-    minify: true,
-    // outbase: "",
+    // minify: true,
     outdir: "../resources/",
     plugins: [sassPlugin()],
 });

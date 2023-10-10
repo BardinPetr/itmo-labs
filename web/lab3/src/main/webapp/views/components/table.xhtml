@@ -9,6 +9,7 @@
 >
 <f:view>
     <p:commandButton
+            id="clear-form"
             value="Clear"
             update="pointTable"
             action="#{pointRepo.removePoints()}"
@@ -16,7 +17,7 @@
 
     <p:dataTable
             id="pointTable"
-            value="#{pointRepo.getCurrentPoints()}"
+            value="#{pointRepo.allPoints}"
             var="i"
             rowIndexVar="idx"
     >

@@ -5,18 +5,22 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import ru.bardinpetr.itmo.lab3.data.beans.EntityManagerProvider;
 import ru.bardinpetr.itmo.lab3.data.dao.DAO;
 import ru.bardinpetr.itmo.lab3.data.models.PointResult;
 import ru.bardinpetr.itmo.lab3.data.models.User;
 
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 @Data
 @Named("userDAO")
 @ApplicationScoped
+@Slf4j
 public class UserDAO extends DAO<Long, User> implements Serializable {
 
     @Inject
@@ -37,6 +41,7 @@ public class UserDAO extends DAO<Long, User> implements Serializable {
     }
 
     public List<PointResult> getPointResults(Long id) {
+        var a = Instant.now();
         var user = fetch(id, List.of("pointResults"));
         if (user.isEmpty()) return List.of();
         return user.get().getPointResults();

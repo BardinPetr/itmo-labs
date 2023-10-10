@@ -5,6 +5,7 @@ import jakarta.faces.annotation.ManagedProperty;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
+import ru.bardinpetr.itmo.lab3.data.dto.AreaConfigDTO;
 import ru.bardinpetr.itmo.lab3.data.dto.PointCheckRequestDTO;
 import ru.bardinpetr.itmo.lab3.data.models.AreaConfig;
 import ru.bardinpetr.itmo.lab3.data.models.Point;
@@ -33,29 +34,33 @@ public class PointCheckController implements Serializable {
 
 
     public PointResult doCheck() {
+        return doCheck(requestDTO, areaPolygonController.getAreaConfigDTO());
+    }
+
+    public PointResult doCheck(PointCheckRequestDTO pointDTO, AreaConfigDTO areaDTO) {
+        log.info("User {} requested {} {}", user.getLogin(), pointDTO, areaDTO);
+
         var startTime = LocalDateTime.now();
 
-        var areaValid = areaPolygonController.getAreaConfigDTO().validate();
-        var requestValid = requestDTO.validate();
-
-        log.info("User {} requested {} {}", user.getLogin(), requestDTO, areaPolygonController.getAreaConfigDTO());
-
+        var areaValid = pointDTO.validate();
+        var requestValid = areaDTO.validate();
         if (!areaValid.isEmpty() || !requestValid.isEmpty()) {
-            log.error("Validation failed for R{}/X{}/Y{}", areaPolygonController.getAreaConfigDTO().getR(), requestDTO.getX(), requestDTO.getY());
+            log.error("Validation failed for R={}/X={}/Y={}", areaDTO.getR(), pointDTO.getX(), pointDTO.getY());
             return null;
         }
 
-        var areaConf = areaPolygonController.getAreaConfig();
-        var predicate = areaPolygonController.getPredicate();
-        var point = Point.of(requestDTO.getX(), requestDTO.getY());
+        var area = AreaConfig.of(areaDTO.getR());
+        var point = Point.of(pointDTO.getX(), pointDTO.getY());
 
-        var status = predicate.test(point);
+        var status = areaPolygonController
+                .getPredicate()
+                .test(point);
 
-        log.info("Check finished point={} over R={} with result={}", point, areaConf.getR(), status);
+        log.info("Check finished point={} over R={} with result={}", point, area.getR(), status);
 
         var res = new PointResult();
         res.setPoint(point);
-        res.setArea(areaConf);
+        res.setArea(area);
         res.setIsInside(status);
         res.setTimestamp(LocalDateTime.now());
         res.setExecutionTime(Duration.between(startTime, res.getTimestamp()));
@@ -63,17 +68,5 @@ public class PointCheckController implements Serializable {
         pointRepository.storePointResult(res);
 
         return res;
-    }
-
-    public void test() {
-        var res = new PointResult();
-        res.setPoint(Point.of(Math.random(), Math.random()));
-        var ac = new AreaConfig();
-        ac.setR(1D);
-        res.setArea(ac);
-        res.setIsInside(true);
-        res.setTimestamp(LocalDateTime.now());
-        res.setExecutionTime(Duration.between(res.getTimestamp(), res.getTimestamp()));
-        pointRepository.storePointResult(res);
     }
 }

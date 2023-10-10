@@ -1,16 +1,35 @@
-import PointResult from "./PointResult.js";
+import {getPoints, getR} from "./api";
 
 class PointResultStorage {
-    static #STORE_NAME_R = "last_r_val";
-
     #callbacks = {
         clear: [],
         insert: [],
+        config: [],
+        change: []
     };
+    #points = [];
+    #config = {};
 
     constructor() {
-        let data = this.get();
-        this.#notify("insert", data)
+    }
+
+    async start() {
+        $(document).on('pfAjaxUpdated', (xhr, settings) => {
+            const source = settings.pfSettings.source;
+            console.log(`Update from ${source}`)
+            if (source.includes("point-check-form") || source.includes("clear-form"))
+                this.#fetch();
+        });
+
+        await this.#fetch();
+    }
+
+    async #fetch() {
+        this.#config.r = await getR();
+        this.#notify("config", this.#config);
+
+        this.#points = await getPoints();
+        this.#notify("change", this.#points);
     }
 
     on(type, callback) {
@@ -21,31 +40,17 @@ class PointResultStorage {
         this.#callbacks[type].forEach((cb) => cb(data));
     }
 
-    clear() {
+    add(point) {
+        this.#points.push(point)
+        this.#notify("insert", point);
     }
 
     get() {
-        return window.lab.history.map(i => new PointResult({
-            id: i[0],
-            x: i[1],
-            y: i[2],
-            r: i[3],
-            result: i[4],
-            timestamp: i[5],
-            executionTime: i[6]
-        }))
-    }
-
-    add(data) {
-    }
-
-    setR(val) {
-        localStorage.setItem(PointResultStorage.#STORE_NAME_R, val);
+        return this.#points;
     }
 
     getR() {
-        let data = localStorage.getItem(PointResultStorage.#STORE_NAME_R);
-        return data == null ? null : parseFloat(data);
+        return this.#config.r
     }
 }
 

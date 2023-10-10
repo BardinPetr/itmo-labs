@@ -6,6 +6,7 @@ import jakarta.faces.annotation.ManagedProperty;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 import ru.bardinpetr.itmo.lab3.app.check.AreaPolygonController;
 import ru.bardinpetr.itmo.lab3.data.dao.impl.UserDAO;
 import ru.bardinpetr.itmo.lab3.data.models.PointResult;
@@ -17,6 +18,7 @@ import java.util.List;
 @Named("pointRepo")
 @RequestScoped
 @Data
+@Slf4j
 public class PointRepository implements Serializable {
 
     @Inject
@@ -30,7 +32,7 @@ public class PointRepository implements Serializable {
     private User user;
 
     /**
-     * Retrieve points for user and area config with PointResults id field renumbered for selection
+     * Retrieve points for user and area config
      * User and AreaConfig supplied from requestScope and AreaPolygonController accordingly
      */
     public List<PointResult> getCurrentPoints() {
@@ -39,6 +41,13 @@ public class PointRepository implements Serializable {
                 .stream()
                 .filter(i -> i.getArea().equals(areaPolygonController.getAreaConfig()))
                 .toList();
+    }
+
+    /**
+     * Retrieve points for user
+     */
+    public List<PointResult> getAllPoints() {
+        return userDAO.getPointResults(user.getId());
     }
 
     /**

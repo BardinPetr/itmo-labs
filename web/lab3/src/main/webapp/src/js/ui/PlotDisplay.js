@@ -1,4 +1,4 @@
-import {range} from "../../utils/utils.js";
+import {range} from "../utils/utils";
 import BaseCanvas from "./BaseCanvas.js";
 
 class AxesDisplay extends BaseCanvas {

@@ -17,7 +17,7 @@ public class PointConstraints implements Serializable {
     private DoubleRange yRange = new DoubleRange(-3.0, EXCLUSIVE, 5.0, EXCLUSIVE);
     private DoubleRange rRange = new DoubleRange(1.0, EXCLUSIVE, 4.0, EXCLUSIVE);
 
-    public DoubleRange getByType(ConstraintType name) {
+    public DoubleRange byType(ConstraintType name) {
         return switch (name) {
             case X -> xRange;
             case Y -> yRange;

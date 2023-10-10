@@ -14,7 +14,7 @@ public class RangeExternalValidator implements ConstraintValidator<RangeExternal
     @Override
     public void initialize(RangeExternalValidated constraintAnnotation) {
         var constraints = CDI.current().select(PointConstraints.class).get();
-        range = constraints.getByType(constraintAnnotation.value());
+        range = constraints.byType(constraintAnnotation.value());
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
 
