@@ -18,7 +18,7 @@
 	
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
-		<param-value>nova-dark</param-value>
+		<param-value>saga</param-value>
 	</context-param>
 	<context-param>
 		<param-name>jakarta.faces.FACELETS_LIBRARIES</param-name>

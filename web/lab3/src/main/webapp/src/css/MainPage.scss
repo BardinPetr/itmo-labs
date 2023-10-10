@@ -1,6 +1,7 @@
 @use "base";
-@use "DataTable";
+//@use "DataTable";
 @import "theme";
+@import 'primeflex/primeflex.scss';
 
 #plot-canvas {
   @include round-plate;
@@ -63,4 +64,13 @@ span[id^="error-msg"] {
 .inline-form {
   margin: 0;
   display: inline;
+}
+
+.clock-container {
+  @include styleclass('col-4 col-offset-4');
+  text-align: center;
+}
+
+.table-card {
+  @include round-plate;
 }

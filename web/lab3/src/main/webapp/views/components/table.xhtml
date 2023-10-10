@@ -8,44 +8,58 @@
       xmlns:l="http://lab3.itmo.bardinpetr.ru/facelets"
 >
 <f:view>
-    <p:commandButton
-            id="clear-form"
-            value="Clear"
-            update="pointTable"
-            action="#{pointRepo.removePoints()}"
-    />
+    <h:form id="table">
+        <div class="card">
+            <p:toolbar>
+                <p:toolbarGroup>
+                    <p:commandButton
+                            id="clear-form"
+                            value="Clear"
+                            update="pointTable"
+                            icon="pi pi-trash"
+                            styleClass="ui-button-outlined ui-button-danger"
+                            action="#{pointRepo.removePoints}"
+                    />
+                </p:toolbarGroup>
+            </p:toolbar>
 
-    <p:dataTable
-            id="pointTable"
-            value="#{pointRepo.allPoints}"
-            var="i"
-            rowIndexVar="idx"
-    >
-        <p:autoUpdate/>
-        <p:column headerText="ID">
-            <h:outputText value="#{idx+1}"/>
-        </p:column>
-        <p:column headerText="Timestamp">
-            <h:outputText value="#{i.timestamp}">
-                <f:convertDateTime type="localDateTime" dateStyle="medium"/>
-            </h:outputText>
-        </p:column>
-        <p:column headerText="Inside">
-            <h:outputText value="#{(i.getIsInside() ? '&#128309;' : '&#128308;')}"/>
-        </p:column>
-        <p:column headerText="R">
-            <l:tableCellDoubleFormat value="${i.area.r}"/>
-        </p:column>
-        <p:column headerText="X">
-            <l:tableCellDoubleFormat value="${i.point.x}"/>
-        </p:column>
-        <p:column headerText="Y">
-            <l:tableCellDoubleFormat value="${i.point.y}"/>
-        </p:column>
-        <p:column headerText="Execution Time, ms">
-            <l:tableCellDoubleFormat value="${i.executionTime.toNanos() / 1e6}"/>
-        </p:column>
+            <p:dataTable
+                    id="pointTable"
+                    styleClass="table-card"
+                    value="#{pointRepo.allPoints}"
+                    var="i"
+                    rowIndexVar="idx"
+                    scrollable="true"
+                    scrollHeight="500"
+                    sortMode="single"
+            >
+                <p:autoUpdate/>
+<!--                <p:column headerText="ID" sortBy="#{i.id}" sortOrder="desc" >-->
+<!--                    <h:outputText value="#{i.id}"/>-->
+<!--                </p:column>-->
+                <p:column headerText="Timestamp" sortBy="#{i.timestamp}" sortOrder="desc">
+                    <h:outputText value="#{i.timestamp}">
+                        <f:convertDateTime type="localDateTime" dateStyle="medium"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Inside">
+                    <h:outputText value="#{(i.getIsInside() ? '&#128309;' : '&#128308;')}"/>
+                </p:column>
+                <p:column headerText="R" sortBy="#{i.area.r}">
+                    <l:tableCellDoubleFormat value="#{i.area.r}"/>
+                </p:column>
+                <p:column headerText="X" sortBy="#{i.point.x}">
+                    <l:tableCellDoubleFormat value="#{i.point.x}"/>
+                </p:column>
+                <p:column headerText="Y" sortBy="#{i.point.y}">
+                    <l:tableCellDoubleFormat value="#{i.point.y}"/>
+                </p:column>
+                <p:column headerText="Execution Time, ms">
+                    <l:tableCellDoubleFormat value="#{i.executionTime.toNanos() / 1e6}"/>
+                </p:column>
 
-    </p:dataTable>
+            </p:dataTable>
+        </div>
+    </h:form>
 </f:view>
 </html>

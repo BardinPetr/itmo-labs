@@ -3,7 +3,7 @@ import {sassPlugin} from "esbuild-sass-plugin";
 
 
 let ctx = await context({
-    entryPoints: ["js/views/MainPage.js", "css/ErrorPage.scss", "css/MainPage.scss"],
+    entryPoints: ["js/views/MainPage.js", "js/views/ClockPage.js", "css/ErrorPage.scss", "css/MainPage.scss"],
     color: true,
     logLevel: "info",
     bundle: true,

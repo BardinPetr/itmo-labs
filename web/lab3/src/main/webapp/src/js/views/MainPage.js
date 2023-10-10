@@ -1,16 +1,19 @@
 import "../utils/jquery.js";
 import FigureDisplay from "../views/FigureDisplay.js";
 import PointResultStorage from "../data/PointResultStorage.js";
-import {checkPointRequest, getConstraints, getR} from "../data/api.js";
+import {checkPointRequest, getConstraints} from "../data/api.js";
 import {absMax} from "../utils/utils";
 
 class MainPage {
+    #window;
     #store;
     #plot;
     #C;
 
     constructor() {
         console.info("STARTED");
+
+        this.#window = $(window);
 
         this.#store = new PointResultStorage();
         this.#plot = new FigureDisplay(
@@ -33,6 +36,17 @@ class MainPage {
         });
 
         await this.#store.start();
+
+        this.#window.on("resize", () => this.onResize());
+        this.updateTableSize();
+    }
+
+    onResize() {
+        this.updateTableSize();
+    }
+
+    updateTableSize() {
+        $(".ui-datatable-scrollable-body").css("max-height", this.#window.height() * 0.5)
     }
 
     async #pointSelected([x, y]) {
@@ -46,7 +60,7 @@ class MainPage {
 
         try {
             const res = await checkPointRequest(x, y, r);
-            if(res == null) {
+            if (res == null) {
                 alert("Invalid request");
                 return;
             }
