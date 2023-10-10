@@ -45,6 +45,10 @@ public class CanvasCheckController extends JSRemoteController implements Seriali
 
         log.info("JS request 'pointClicked': from canvas: {} {}", area, point);
         var result = controller.doCheck(point, area);
+        if (result == null) {
+            sendParam("result", null);
+            return;
+        }
 
         var send = new JSONObject(CanvasPointResult.of(result));
         log.info("JS request 'pointClicked': sending {}", send);

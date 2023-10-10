@@ -1,5 +1,7 @@
 import {getPoints, getR} from "./api";
 
+const EVENT_SOURCES = ["point-check-form:sendBtn", "point-check-form:rInput", "point-check-form:rSlider", "clear-form"]
+
 class PointResultStorage {
     #callbacks = {
         clear: [],
@@ -15,9 +17,9 @@ class PointResultStorage {
 
     async start() {
         $(document).on('pfAjaxUpdated', (xhr, settings) => {
-            const source = settings.pfSettings.source;
+            const source = settings.pfSettings.source.trim();
             console.log(`Update from ${source}`)
-            if (source.includes("point-check-form") || source.includes("clear-form"))
+            if (EVENT_SOURCES.includes(source))
                 this.#fetch();
         });
 
@@ -25,6 +27,8 @@ class PointResultStorage {
     }
 
     async #fetch() {
+        console.log("Fetching updates")
+
         this.#config.r = await getR();
         this.#notify("config", this.#config);
 
