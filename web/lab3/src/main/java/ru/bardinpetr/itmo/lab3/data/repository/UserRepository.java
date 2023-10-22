@@ -13,6 +13,7 @@ import ru.bardinpetr.itmo.lab3.data.models.AreaConfig;
 import java.io.Serializable;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Data
 @Named("userRepo")
@@ -20,6 +21,4 @@ import java.time.LocalDateTime;
 public class UserRepository implements Serializable {
     @Inject
     private UserDAO userDAO;
-
-
 }

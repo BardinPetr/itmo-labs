@@ -1,20 +1,25 @@
 package ru.bardinpetr.itmo.lab3.context;
 
+import io.jsonwebtoken.Jwts;
+import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Persistence;
 import jakarta.servlet.ServletContextEvent;
 import jakarta.servlet.ServletContextListener;
 import jakarta.servlet.annotation.WebListener;
-import ru.bardinpetr.itmo.lab3.data.models.Point;
-import ru.bardinpetr.itmo.lab3.data.models.PointResult;
-import ru.bardinpetr.itmo.lab3.data.models.User;
-import ru.bardinpetr.itmo.lab3.data.models.AreaConfig;
+import ru.bardinpetr.itmo.lab3.data.dao.impl.UserDAO;
+import ru.bardinpetr.itmo.lab3.data.models.*;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @WebListener
 public class AppContextInitializer implements ServletContextListener {
+
+    @Inject
+    private UserDAO userDAO;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -24,12 +29,14 @@ public class AppContextInitializer implements ServletContextListener {
         User u1 = new User();
         u1.setLogin("1");
         u1.setPasswordHash("1");
-        u1.setRole("1");
+//        u1.getRoles().add(Role.of("admin"));
+//        u1.getRoles().add(Role.of("2"));
 
         User u2 = new User();
         u2.setLogin("2");
         u2.setPasswordHash("2");
-        u2.setRole("2");
+//        u2.getRoles().add(Role.of("user"));
+//        u2.getRoles().add(Role.of("2"));
 
 
         Point p1 = new Point();
@@ -54,17 +61,34 @@ public class AppContextInitializer implements ServletContextListener {
         m.getTransaction().begin();
         m.persist(u1);
         m.persist(u2);
-//        m.getTransaction().commit();
+        m.getTransaction().commit();
 
-//
-//        var cb = m.getCriteriaBuilder();
-//        var query = cb.createQuery();
-//        var user = query.from(User.class);
+
+        var cb = m.getCriteriaBuilder();
+        var query = cb.createQuery();
+        var user = query.from(User.class);
 //        user.fetch("pointResults");
+        query.select(user);
+
+        var u = (User) m.createQuery(query).getResultList().get(0);
+        System.out.println(u);
+
+        userDAO.addRole(u, "test");
+        System.out.println(userDAO.getRoles(u));
+
+        userDAO.addRole(u, "test");
+        userDAO.addRole(u, "user");
+        userDAO.addRole(u, "u3ser");
+
+        System.out.println(userDAO.getRoles(u));
+
+//        cb = m.getCriteriaBuilder();
+//        query = cb.createQuery();
+//        user = query.from(User.class);
 //        query.select(user);
-//
-//        System.out.println(m.createQuery(query).getResultList());
-//
+
+//        u = (User) m.createQuery(query).getResultList().get(0);
+//        System.out.println(u);
 //        var res = (User) m.createQuery(query).getResultList().get(0);
 //        System.out.println(res.getPointResults().get(0).getArea());
 

@@ -9,13 +9,15 @@ import lombok.extern.slf4j.Slf4j;
 import ru.bardinpetr.itmo.lab3.data.beans.EntityManagerProvider;
 import ru.bardinpetr.itmo.lab3.data.dao.DAO;
 import ru.bardinpetr.itmo.lab3.data.models.PointResult;
+import ru.bardinpetr.itmo.lab3.data.models.Role;
 import ru.bardinpetr.itmo.lab3.data.models.User;
 
 import java.io.Serializable;
-import java.time.Duration;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 @Named("userDAO")
@@ -25,6 +27,10 @@ public class UserDAO extends DAO<Long, User> implements Serializable {
 
     @Inject
     private EntityManagerProvider entityManagerProvider;
+
+    @Inject
+    private RoleDAO roleDAO;
+
 
     public UserDAO() {
         super(User.class);
@@ -45,5 +51,21 @@ public class UserDAO extends DAO<Long, User> implements Serializable {
         var user = fetch(id, List.of("pointResults"));
         if (user.isEmpty()) return List.of();
         return user.get().getPointResults();
+    }
+
+    public Set<String> getRoles(User user) {
+        return fetch(user.getId(), List.of("roles"))
+                .map(User::getRoles)
+                .orElse(Set.of())
+                .stream()
+                .map(Role::getValue)
+                .collect(Collectors.toSet());
+    }
+
+    public void addRole(User user, String roleName) {
+        var dbRole = roleDAO.find(roleName);
+        var role = dbRole.orElse(Role.of(roleName));
+        user.getRoles().add(role);
+        update(user);
     }
 }

@@ -7,18 +7,16 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 @Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "APP_USER")
-@NamedQuery(
-        name = "findUser",
-        query = "select u from User u where u.login = :login"
-)
+@Table(name = "app_user")
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +28,9 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String passwordHash;
 
-    private String role;
+    @ManyToMany(targetEntity = Role.class, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "user_role")
+    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
