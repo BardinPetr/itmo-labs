@@ -1,4 +1,4 @@
-package ru.bardinpetr.itmo.lab3.app.utils;
+package ru.bardinpetr.itmo.lab3.utils;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.context.FacesContext;

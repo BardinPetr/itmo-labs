@@ -11,7 +11,7 @@
 	<navigation-rule>
 		<from-view-id>/views/login.xhtml</from-view-id>
 		<navigation-case>
-			<from-outcome>LOGIN_OK</from-outcome>
+			<from-outcome>#{navigation.toHome()}</from-outcome>
 			<to-view-id>/views/home.xhtml</to-view-id>
 			<redirect/>
 		</navigation-case>

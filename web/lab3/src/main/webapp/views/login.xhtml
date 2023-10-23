@@ -4,24 +4,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui"
+      xmlns:p="http://primefaces.org/ui" xmlns:l="http://lab3.itmo.bardinpetr.ru/facelets"
 >
-<h:head>
-</h:head>
-<h:body>
-    <ui:composition template="common.xhtml">
-        <ui:define name="content">
-
-            <h:form>
-                <p:outputLabel for="login" value="Email:"/>
-                <p:inputText id="login" type="text"/>
-                <p:outputLabel for="password" value="Password:"/>
-                <p:inputText id="password" type="password"/>
-                <p:commandButton>Login</p:commandButton>
-                <p:commandButton>Register</p:commandButton>
-            </h:form>
-
-        </ui:define>
-    </ui:composition>
-</h:body>
+<ui:composition template="common.xhtml">
+    <ui:define name="content">
+        <h:form>
+            <p:outputLabel for="login" value="Email:"/>
+            <p:inputText id="login" type="email" value="#{loginPageBean.username}"/>
+            <l:updatableMessage for="login"/>
+            <p:outputLabel for="password" value="Password:"/>
+            <p:inputText id="password" type="password" value="#{loginPageBean.password}"/>
+            <l:updatableMessage for="password"/>
+            <p:commandButton action="#{loginPageBean.doLogin()}" value="Login"/>
+            <p:commandButton action="#{loginPageBean.doRegister()}" value="Register"/>
+        </h:form>
+    </ui:define>
+</ui:composition>
 </html>

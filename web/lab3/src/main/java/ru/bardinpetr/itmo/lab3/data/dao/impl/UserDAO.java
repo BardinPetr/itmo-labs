@@ -47,7 +47,6 @@ public class UserDAO extends DAO<Long, User> implements Serializable {
     }
 
     public List<PointResult> getPointResults(Long id) {
-        var a = Instant.now();
         var user = fetch(id, List.of("pointResults"));
         if (user.isEmpty()) return List.of();
         return user.get().getPointResults();
@@ -63,9 +62,7 @@ public class UserDAO extends DAO<Long, User> implements Serializable {
     }
 
     public void addRole(User user, String roleName) {
-        var dbRole = roleDAO.find(roleName);
-        var role = dbRole.orElse(Role.of(roleName));
-        user.getRoles().add(role);
+        user.getRoles().add(roleDAO.instance(roleName));
         update(user);
     }
 }

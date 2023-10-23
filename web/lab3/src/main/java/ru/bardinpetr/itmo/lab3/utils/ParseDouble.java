@@ -1,4 +1,4 @@
-package ru.bardinpetr.itmo.lab3.app.utils;
+package ru.bardinpetr.itmo.lab3.utils;
 
 import java.util.function.Predicate;
 import java.util.regex.Pattern;

@@ -9,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Optional;
 
 @Slf4j
-@Named("contextEvaluator")
 @ApplicationScoped
 public class ContextExpressionEvaluator {
     public <T> Optional<T> evaluateExpression(Class<T> targetClass, String expression) {

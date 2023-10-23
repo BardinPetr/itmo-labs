@@ -8,16 +8,9 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import ru.bardinpetr.itmo.lab3.data.beans.EntityManagerProvider;
 import ru.bardinpetr.itmo.lab3.data.dao.DAO;
-import ru.bardinpetr.itmo.lab3.data.models.PointResult;
 import ru.bardinpetr.itmo.lab3.data.models.Role;
-import ru.bardinpetr.itmo.lab3.data.models.User;
 
 import java.io.Serializable;
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Data
 @Named("roleDAO")
@@ -35,5 +28,14 @@ public class RoleDAO extends DAO<String, Role> implements Serializable {
     @PostConstruct
     public void init() {
         setManager(entityManagerProvider.getEntityManager());
+    }
+
+    public Role instance(String value) {
+        return find(value)
+                .orElseGet(() -> {
+                    var newRole = Role.of(value);
+                    insert(newRole);
+                    return newRole;
+                });
     }
 }

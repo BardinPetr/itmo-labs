@@ -15,6 +15,17 @@
 		<servlet-name>jsf</servlet-name>
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
+
+<!--	<security-constraint>-->
+<!--		<web-resource-collection>-->
+<!--			<web-resource-name>auth_pages</web-resource-name>-->
+<!--			<url-pattern>/views/login.xhtml</url-pattern>-->
+<!--		</web-resource-collection>-->
+<!--		<auth-constraint>-->
+<!--			<-->
+<!--		</auth-constraint>-->
+<!--	</security-constraint>-->
+
 	
 	<context-param>
 		<param-name>primefaces.THEME</param-name>

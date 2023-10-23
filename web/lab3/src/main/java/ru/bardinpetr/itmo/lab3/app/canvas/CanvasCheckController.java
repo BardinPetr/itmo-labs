@@ -16,7 +16,7 @@ import ru.bardinpetr.itmo.lab3.data.repository.PointRepository;
 import java.io.Serializable;
 import java.util.List;
 
-import static ru.bardinpetr.itmo.lab3.app.utils.ParseDouble.safeParseDouble;
+import static ru.bardinpetr.itmo.lab3.utils.ParseDouble.safeParseDouble;
 
 
 @Named("canvasCheckController")
