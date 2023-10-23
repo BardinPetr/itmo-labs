@@ -8,7 +8,7 @@ import org.primefaces.shaded.json.JSONArray;
 import org.primefaces.shaded.json.JSONObject;
 import ru.bardinpetr.itmo.lab3.app.canvas.dto.CanvasPointResult;
 import ru.bardinpetr.itmo.lab3.app.check.PointCheckController;
-import ru.bardinpetr.itmo.lab3.data.beans.PointConstraints;
+import ru.bardinpetr.itmo.lab3.app.check.models.PointConstraints;
 import ru.bardinpetr.itmo.lab3.data.dto.AreaConfigDTO;
 import ru.bardinpetr.itmo.lab3.data.dto.PointCheckRequestDTO;
 import ru.bardinpetr.itmo.lab3.data.repository.PointRepository;

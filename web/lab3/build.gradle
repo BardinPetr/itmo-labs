@@ -38,9 +38,6 @@ dependencies {
   // validation
   implementation 'org.hibernate.validator:hibernate-validator:7.0.5.Final'
 
-  // auth
-//  implementation 'org.glassfish.soteria:jakarta.security.enterprise:3.0.3'
-
   // JPA
   implementation 'org.eclipse.persistence:org.eclipse.persistence.jpa:4.0.2'
   compileOnly 'org.eclipse.persistence:eclipselink:4.0.2'

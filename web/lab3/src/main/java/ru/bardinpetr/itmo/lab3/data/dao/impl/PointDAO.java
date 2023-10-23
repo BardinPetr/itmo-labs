@@ -5,7 +5,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Data;
-import ru.bardinpetr.itmo.lab3.data.beans.EntityManagerProvider;
+import ru.bardinpetr.itmo.lab3.data.util.EntityManagerProvider;
 import ru.bardinpetr.itmo.lab3.data.dao.DAO;
 import ru.bardinpetr.itmo.lab3.data.models.Point;
 

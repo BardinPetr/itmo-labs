@@ -2,7 +2,8 @@ import "../utils/jquery.js";
 import FigureDisplay from "../views/FigureDisplay.js";
 import PointResultStorage from "../data/PointResultStorage.js";
 import {checkPointRequest, getConstraints} from "../data/api.js";
-import {absMax} from "../utils/utils";
+import {absMax} from "../utils/utils.js";
+import ClientRangeValidator from "../validation/ClientRangeValidator.js";
 
 class MainPage {
     #window;
@@ -12,6 +13,8 @@ class MainPage {
 
     constructor() {
         console.info("STARTED");
+
+        PrimeFaces.validator['RangeExternalValidated'] = new ClientRangeValidator();
 
         this.#window = $(window);
 

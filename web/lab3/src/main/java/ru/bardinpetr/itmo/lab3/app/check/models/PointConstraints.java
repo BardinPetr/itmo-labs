@@ -1,4 +1,4 @@
-package ru.bardinpetr.itmo.lab3.data.beans;
+package ru.bardinpetr.itmo.lab3.app.check.models;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Named;

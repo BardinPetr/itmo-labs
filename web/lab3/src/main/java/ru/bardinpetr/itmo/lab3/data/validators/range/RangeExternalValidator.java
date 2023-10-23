@@ -3,19 +3,28 @@ package ru.bardinpetr.itmo.lab3.data.validators.range;
 import jakarta.enterprise.inject.spi.CDI;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import ru.bardinpetr.itmo.lab3.data.beans.PointConstraints;
+import jakarta.validation.metadata.ConstraintDescriptor;
+import org.primefaces.shaded.json.JSONObject;
+import org.primefaces.validate.bean.ClientValidationConstraint;
+import ru.bardinpetr.itmo.lab3.app.check.models.PointConstraints;
 import ru.bardinpetr.itmo.lab3.data.validators.range.models.DoubleRange;
+
+import java.util.Map;
 
 import static ru.bardinpetr.itmo.lab3.data.validators.range.models.RangeType.INCLUSIVE;
 
-public class RangeExternalValidator implements ConstraintValidator<RangeExternalValidated, Double> {
+public class RangeExternalValidator implements ConstraintValidator<RangeExternalValidated, Double>, ClientValidationConstraint {
     private DoubleRange range;
 
     @Override
     public void initialize(RangeExternalValidated constraintAnnotation) {
-        var constraints = CDI.current().select(PointConstraints.class).get();
-        range = constraints.byType(constraintAnnotation.value());
+        range = getRange(constraintAnnotation);
         ConstraintValidator.super.initialize(constraintAnnotation);
+    }
+
+    public DoubleRange getRange(RangeExternalValidated constraintAnnotation) {
+        var constraints = CDI.current().select(PointConstraints.class).get();
+        return constraints.byType(constraintAnnotation.value());
     }
 
     @Override
@@ -36,5 +45,18 @@ public class RangeExternalValidator implements ConstraintValidator<RangeExternal
         }
 
         return true;
+    }
+
+    @Override
+    public Map<String, Object> getMetadata(ConstraintDescriptor<?> constraintDescriptor) {
+        var curRange = getRange((RangeExternalValidated) constraintDescriptor.getAnnotation());
+        return Map.of(
+                "data-range", new JSONObject(curRange).toString()
+        );
+    }
+
+    @Override
+    public String getValidatorId() {
+        return RangeExternalValidated.class.getSimpleName();
     }
 }

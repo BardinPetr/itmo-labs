@@ -6,14 +6,13 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import ru.bardinpetr.itmo.lab3.data.beans.EntityManagerProvider;
+import ru.bardinpetr.itmo.lab3.data.util.EntityManagerProvider;
 import ru.bardinpetr.itmo.lab3.data.dao.DAO;
 import ru.bardinpetr.itmo.lab3.data.models.PointResult;
 import ru.bardinpetr.itmo.lab3.data.models.Role;
 import ru.bardinpetr.itmo.lab3.data.models.User;
 
 import java.io.Serializable;
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;

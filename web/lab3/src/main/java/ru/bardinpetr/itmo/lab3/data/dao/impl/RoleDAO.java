@@ -6,7 +6,7 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import ru.bardinpetr.itmo.lab3.data.beans.EntityManagerProvider;
+import ru.bardinpetr.itmo.lab3.data.util.EntityManagerProvider;
 import ru.bardinpetr.itmo.lab3.data.dao.DAO;
 import ru.bardinpetr.itmo.lab3.data.models.Role;
 

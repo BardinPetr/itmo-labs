@@ -1,4 +1,4 @@
-package ru.bardinpetr.itmo.lab3.data.beans;
+package ru.bardinpetr.itmo.lab3.data.util;
 
 
 import jakarta.annotation.PostConstruct;
