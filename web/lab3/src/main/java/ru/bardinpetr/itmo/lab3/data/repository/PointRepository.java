@@ -64,7 +64,7 @@ public class PointRepository implements Serializable {
      * Remove all PointResult from storage of user specified in requestScope
      */
     public void removePoints() {
-        user.setPointResults(List.of());
+        user.getPointResults().clear();
         userDAO.update(user);
     }
 }

@@ -29,15 +29,19 @@ public class RangeExternalValidator implements ConstraintValidator<RangeExternal
 
     @Override
     public boolean isValid(Double value, ConstraintValidatorContext context) {
-        if (value == null)
+        context.disableDefaultConstraintViolation();
+        if (value == null) {
+            context
+                    .buildConstraintViolationWithTemplate("Value should not be empty")
+                    .addConstraintViolation();
             return false;
+        }
 
         var minCheck = value.compareTo(range.getMin());
         var maxCheck = value.compareTo(range.getMax());
         var res = (range.getMinType() == INCLUSIVE ? minCheck >= 0 : minCheck > 0) &&
                 (range.getMaxType() == INCLUSIVE ? maxCheck <= 0 : maxCheck < 0);
         if (!res) {
-            context.disableDefaultConstraintViolation();
             context
                     .buildConstraintViolationWithTemplate("Value {value}=%.2f not in range %s".formatted(value, range))
                     .addConstraintViolation();

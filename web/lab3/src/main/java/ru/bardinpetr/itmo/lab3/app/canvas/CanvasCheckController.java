@@ -14,6 +14,7 @@ import ru.bardinpetr.itmo.lab3.data.dto.PointCheckRequestDTO;
 import ru.bardinpetr.itmo.lab3.data.repository.PointRepository;
 
 import java.io.Serializable;
+import java.time.ZoneId;
 import java.util.List;
 
 import static ru.bardinpetr.itmo.lab3.utils.ParseDouble.safeParseDouble;
@@ -61,9 +62,19 @@ public class CanvasCheckController extends JSRemoteController implements Seriali
     }
 
     public void getPoints() {
+        var fromTime = getParam("from");
+        if (fromTime == null)
+            fromTime = "0";
+        var timestamp = Long.parseLong(fromTime) / 1000 - 1;
+
         var src = repository
                 .getAllPoints()
                 .stream()
+                .filter(i ->
+                        i.getTimestamp()
+                                .atZone(ZoneId.systemDefault())
+                                .toEpochSecond() > timestamp
+                )
                 .map(CanvasPointResult::of)
                 .toList();
 

@@ -3,18 +3,17 @@ import FigureDisplay from "../views/FigureDisplay.js";
 import PointResultStorage from "../data/PointResultStorage.js";
 import {checkPointRequest, getConstraints} from "../data/api.js";
 import {absMax} from "../utils/utils.js";
-import ClientRangeValidator from "../validation/ClientRangeValidator.js";
+import primefacesInjectValidator from "../validation/ClientRangeValidator.js";
 
 class MainPage {
     #window;
     #store;
     #plot;
     #C;
+    #disableTimeout;
 
     constructor() {
-        console.info("STARTED");
-
-        PrimeFaces.validator['RangeExternalValidated'] = new ClientRangeValidator();
+        primefacesInjectValidator();
 
         this.#window = $(window);
 
@@ -42,6 +41,28 @@ class MainPage {
 
         this.#window.on("resize", () => this.onResize());
         this.updateTableSize();
+
+        // catch validation errors on R input field and disable plot
+        const rInput = $('#point-check-form\\:rInput');
+        rInput.on(
+            "keyup",
+            () => this.#checkPlotDisable(rInput)
+        )
+
+        console.info("STARTED");
+    }
+
+    #checkPlotDisable(rField) {
+        if (this.#disableTimeout)
+            clearTimeout(this.#disableTimeout)
+
+        this.#disableTimeout =
+            setTimeout(() =>
+                    this.#plot.redraw({
+                        disable: rField.attr("aria-invalid") === 'true'
+                    }),
+                300
+            )
     }
 
     onResize() {

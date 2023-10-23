@@ -2,6 +2,7 @@ import PlotDisplay from "../ui/PlotDisplay.js";
 
 class FigureDisplay extends PlotDisplay {
     #datastore;
+    #disabled = false;
 
     constructor(canvas, datastore, onClick) {
         super(canvas, onClick);
@@ -19,6 +20,12 @@ class FigureDisplay extends PlotDisplay {
         this.#datastore = datastore;
     }
 
+    _onClick(point) {
+        if (this.#disabled)
+            return
+        super._onClick(point)
+    }
+
     #preloadData() {
         this.addPoints(this.#datastore.get());
     }
@@ -27,8 +34,13 @@ class FigureDisplay extends PlotDisplay {
         super.setup(params);
     }
 
-    redraw() {
-        super.redraw({});
+    redraw(params) {
+        super.redraw(params);
+
+        let {disable} = params || {};
+        this.#disabled = disable || false;
+        if (disable)
+            return;
 
         const R = this.#datastore.getR();
         if (!R) return;
@@ -62,7 +74,7 @@ class FigureDisplay extends PlotDisplay {
             line(R, R / 2);
             line(0, R / 2);
             line(-R, 0);
-            line(-R/ 2, 0);
+            line(-R / 2, 0);
             c.arc(
                 ...this._toCanvas([0, 0]),
                 R * this._ratio / 2,

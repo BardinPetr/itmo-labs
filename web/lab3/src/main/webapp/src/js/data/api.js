@@ -18,10 +18,19 @@ export const checkPointRequest = async (x, y, r) => {
 
 export const getR = async () => extractReturn(await remoteGetR()).r;
 
-export const getPoints = async () => {
-    const {points} = extractReturn(await remoteGetPoints());
-    return points.map(pointResultFromServer);
+const extractPoints = (response) => (response.points || []).map(pointResultFromServer);
+
+let lastTime = 0;
+export const getNewPoints = async () => {
+    const res = extractReturn(await remoteGetNewPoints([
+        {name: "from", value: lastTime}
+    ]));
+    lastTime = Date.now();
+    return extractPoints(res);
 }
+
+export const getPoints = async () =>
+    extractPoints(extractReturn(await remoteGetNewPoints()));
 
 export const getConstraints = async () => {
     const {constraints: [r, x, y]} = extractReturn(await remoteGetConstraints());

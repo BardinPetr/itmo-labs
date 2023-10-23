@@ -12,4 +12,9 @@ class ClientRangeValidator {
     }
 }
 
-export default ClientRangeValidator;
+export default () => {
+    const doubleValidatorText = 'Value "{0}" is not a number';
+    PrimeFaces.locales['en'].messages['jakarta.faces.converter.DoubleConverter.DOUBLE'] =
+        PrimeFaces.locales['en'].messages['jakarta.faces.converter.DoubleConverter.DOUBLE_detail'] = doubleValidatorText;
+    PrimeFaces.validator['RangeExternalValidated'] = new ClientRangeValidator();
+};

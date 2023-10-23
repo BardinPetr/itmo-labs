@@ -1,7 +1,7 @@
 import {Validator} from "./Validator";
 
+const EPS = 1e-6;
 const isFloat = (x) => /^-?\d+(\.\d+)?$/.test(x);
-
 
 class FloatValidator extends Validator {
     #min;
@@ -18,13 +18,13 @@ class FloatValidator extends Validator {
     }
 
     check(value) {
-        if (!value)
+        if (value === null || value === undefined)
             return {
                 valid: false,
                 message: "Can't be empty",
             };
 
-        if (value.toString().length > 9)
+        if (value.toString().length > 6)
             return {
                 valid: false,
                 message: "Precision exceeded",
@@ -40,9 +40,11 @@ class FloatValidator extends Validator {
 
         const message = `Should be in range ${this.#minInclusive ? "[" : "("}${this.#min}, ${this.#max}${this.#maxInclusive ? "]" : ")"}`;
 
+        const maxDelta = this.#max - val;
+        const minDelta = val - this.#min;
         const valid =
-            (this.#maxInclusive ? val <= this.#max : val < this.#max) &&
-            (this.#minInclusive ? val >= this.#min : val > this.#min);
+            (this.#maxInclusive ? (Math.abs(maxDelta) < EPS || maxDelta > EPS) : maxDelta > EPS) &&
+            (this.#minInclusive ? (Math.abs(minDelta) < EPS || minDelta > EPS) : minDelta > EPS);
 
         return {
             valid,
