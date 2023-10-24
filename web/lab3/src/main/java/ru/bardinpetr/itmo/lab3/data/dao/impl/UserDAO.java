@@ -6,13 +6,14 @@ import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import ru.bardinpetr.itmo.lab3.data.util.EntityManagerProvider;
 import ru.bardinpetr.itmo.lab3.data.dao.DAO;
 import ru.bardinpetr.itmo.lab3.data.models.PointResult;
 import ru.bardinpetr.itmo.lab3.data.models.Role;
 import ru.bardinpetr.itmo.lab3.data.models.User;
+import ru.bardinpetr.itmo.lab3.data.util.EntityManagerProvider;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -45,10 +46,10 @@ public class UserDAO extends DAO<Long, User> implements Serializable {
         return res.isEmpty() ? Optional.empty() : Optional.of(res.get(0));
     }
 
-    public List<PointResult> getPointResults(Long id) {
-        var user = fetch(id, List.of("pointResults"));
-        if (user.isEmpty()) return List.of();
-        return user.get().getPointResults();
+    public List<PointResult> getPointResults(User user) {
+        return fetch(user.getId(), List.of("pointResults"))
+                .map(User::getPointResults)
+                .orElse(new ArrayList<>());
     }
 
     public Set<String> getRoles(User user) {

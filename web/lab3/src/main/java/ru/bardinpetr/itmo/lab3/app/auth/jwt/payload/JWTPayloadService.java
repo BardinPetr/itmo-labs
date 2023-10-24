@@ -15,12 +15,11 @@ import java.util.Set;
 public class JWTPayloadService {
     public static final String CLAIM_KID = "kid";
     public static final String CLAIM_ROLE = "roles";
-    public static final String CLAIM_GROUP = "groups";
 
     public JwtBuilder inject(JwtBuilder builder, JWTCallerPrincipal user) {
         return builder
                 .setSubject(user.getName())
-                .claim(CLAIM_GROUP, user.getGroups());
+                .claim(CLAIM_ROLE, user.getGroups());
     }
 
     public JWTCallerPrincipal extract(Jws<Claims> token) throws JWTPayloadException {
@@ -33,7 +32,7 @@ public class JWTPayloadService {
 
     private JWTType extractType(Jws<Claims> token) throws JWTPayloadException {
         try {
-            return JWTType.valueOf((String) token.getHeader().get(CLAIM_KID));
+            return JWTType.byKid((String) token.getHeader().get(CLAIM_KID));
         } catch (IllegalArgumentException ex) {
             throw new JWTPayloadException();
         }

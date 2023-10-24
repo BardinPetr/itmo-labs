@@ -5,6 +5,7 @@ import jakarta.faces.annotation.ManagedProperty;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.extern.slf4j.Slf4j;
+import ru.bardinpetr.itmo.lab3.app.auth.UserSession;
 import ru.bardinpetr.itmo.lab3.data.dto.AreaConfigDTO;
 import ru.bardinpetr.itmo.lab3.data.dto.PointCheckRequestDTO;
 import ru.bardinpetr.itmo.lab3.data.models.AreaConfig;
@@ -14,6 +15,7 @@ import ru.bardinpetr.itmo.lab3.data.models.User;
 import ru.bardinpetr.itmo.lab3.data.repository.PointRepository;
 
 import java.io.Serializable;
+import java.security.Principal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
@@ -29,8 +31,7 @@ public class PointCheckController implements Serializable {
     @Inject
     private PointCheckRequestDTO requestDTO;
     @Inject
-    @ManagedProperty("#{requestScope.user}")
-    private User user;
+    private UserSession session;
 
 
     public PointResult doCheck() {
@@ -38,7 +39,7 @@ public class PointCheckController implements Serializable {
     }
 
     public PointResult doCheck(PointCheckRequestDTO pointDTO, AreaConfigDTO areaDTO) {
-        log.info("User {} requested {} {}", user.getLogin(), pointDTO, areaDTO);
+        log.info("User {} requested {} {}", session.getUser().getName(), pointDTO, areaDTO);
 
         var startTime = LocalDateTime.now();
 

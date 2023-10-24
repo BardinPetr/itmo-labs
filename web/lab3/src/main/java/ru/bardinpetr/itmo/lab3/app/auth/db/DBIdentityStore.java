@@ -2,12 +2,12 @@ package ru.bardinpetr.itmo.lab3.app.auth.db;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import jakarta.security.enterprise.CallerPrincipal;
 import jakarta.security.enterprise.credential.Credential;
 import jakarta.security.enterprise.credential.UsernamePasswordCredential;
 import jakarta.security.enterprise.identitystore.CredentialValidationResult;
 import jakarta.security.enterprise.identitystore.IdentityStore;
 import lombok.extern.slf4j.Slf4j;
+import ru.bardinpetr.itmo.lab3.app.auth.db.models.DBUserPrincipal;
 import ru.bardinpetr.itmo.lab3.app.auth.db.utils.PasswordService;
 import ru.bardinpetr.itmo.lab3.data.dao.impl.UserDAO;
 
@@ -40,7 +40,7 @@ public class DBIdentityStore implements IdentityStore {
                 return CredentialValidationResult.INVALID_RESULT;
 
             return new CredentialValidationResult(
-                    new CallerPrincipal(username),
+                    new DBUserPrincipal(user),
                     dao.getRoles(user)
             );
         }

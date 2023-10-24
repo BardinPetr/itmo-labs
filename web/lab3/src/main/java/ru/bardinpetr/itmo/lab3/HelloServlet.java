@@ -11,11 +11,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "helloServlet", urlPatterns = "/servlet")
-@ServletSecurity(
-        value = @HttpConstraint(
-                rolesAllowed = {"admin"}
-        )
-)
+//@ServletSecurity(
+//        value = @HttpConstraint(
+//                rolesAllowed = {"admin"}
+//        )
+//)
 public class HelloServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

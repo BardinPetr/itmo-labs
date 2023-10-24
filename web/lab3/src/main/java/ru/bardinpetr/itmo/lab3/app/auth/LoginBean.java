@@ -2,11 +2,8 @@ package ru.bardinpetr.itmo.lab3.app.auth;
 
 
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.security.enterprise.SecurityContext;
 import jakarta.security.enterprise.credential.Password;
 import jakarta.security.enterprise.credential.UsernamePasswordCredential;
 import jakarta.validation.Validator;
@@ -14,31 +11,26 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import ru.bardinpetr.itmo.lab3.app.auth.db.utils.PasswordService;
-import ru.bardinpetr.itmo.lab3.context.ContextRequestProvider;
-import ru.bardinpetr.itmo.lab3.data.dao.impl.RoleDAO;
+import ru.bardinpetr.itmo.lab3.context.ContextProvider;
 import ru.bardinpetr.itmo.lab3.data.dao.impl.UserDAO;
 import ru.bardinpetr.itmo.lab3.data.models.User;
+import ru.bardinpetr.itmo.lab3.navigation.NavigationController;
 
-import java.util.Optional;
-
-import static jakarta.security.enterprise.AuthenticationStatus.*;
+import static jakarta.security.enterprise.AuthenticationStatus.SEND_FAILURE;
+import static jakarta.security.enterprise.AuthenticationStatus.SUCCESS;
 import static jakarta.security.enterprise.authentication.mechanism.http.AuthenticationParameters.withParams;
 
 @Data
 @RequestScoped
-@Named("loginPageBean")
+@Named("loginBean")
 @Slf4j
-public class LoginPageBean {
+public class LoginBean {
     @Inject
-    private ContextRequestProvider contextReq;
+    private NavigationController navigation;
     @Inject
-    private SecurityContext securityContext;
-    @Inject
-    private FacesContext context;
+    private ContextProvider contextReq;
     @Inject
     private UserDAO userDAO;
-    @Inject
-    private RoleDAO roleDAO;
     @Inject
     private PasswordService passwordService;
     @Inject
@@ -55,26 +47,26 @@ public class LoginPageBean {
         log.info("Started login authentication for {}", username);
 
         var cred = asCredential();
-        if (cred.isEmpty()) {
+        if (cred == null) {
             log.error("User {} authentication failed", username);
             return null;
         }
 
-        var status = securityContext.authenticate(
+        var status = contextReq.getSecurityContext().authenticate(
                 contextReq.getRequest(),
                 contextReq.getResponse(),
-                withParams().newAuthentication(true).credential(cred.get())
+                withParams().newAuthentication(true).credential(cred)
         );
         log.info("User {} login status {}", username, status);
 
         if (status.equals(SUCCESS)) {
-//            context.responseComplete();
-            return "home";
+            return navigation.toHome();
         } else if (status.equals(SEND_FAILURE)) {
-            sendError("Invalid user data");
+            // TODO inform user
             log.error("User {} authentication failed", username);
         }
-        context.responseComplete();
+
+        contextReq.getContext().responseComplete();
         return null;
     }
 
@@ -91,9 +83,9 @@ public class LoginPageBean {
         var user = new User();
         user.setLogin(username);
         user.setPasswordHash(hash);
-        user.getRoles().add(roleDAO.instance("user"));
 
         if (userDAO.insert(user)) {
+            userDAO.addRole(user, "user");
             log.info("Registered user {} successfully", username);
         } else {
             log.warn("Register user {} failed", username);
@@ -102,20 +94,8 @@ public class LoginPageBean {
         return doLogin();
     }
 
-    public boolean isValid() {
-        return validator.validate(this).isEmpty();
-    }
-
-    protected Optional<UsernamePasswordCredential> asCredential() {
-        return isValid() ?
-                Optional.of(new UsernamePasswordCredential(username, new Password(password)))
-                : Optional.empty();
-    }
-
-    private void sendError(String message) {
-        context.addMessage(
-                null,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, message, null)
-        );
+    protected UsernamePasswordCredential asCredential() {
+        return validator.validate(this).isEmpty() ?
+                new UsernamePasswordCredential(username, new Password(password)) : null;
     }
 }

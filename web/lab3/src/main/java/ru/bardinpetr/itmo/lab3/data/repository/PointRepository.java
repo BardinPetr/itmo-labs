@@ -2,15 +2,14 @@ package ru.bardinpetr.itmo.lab3.data.repository;
 
 
 import jakarta.enterprise.context.RequestScoped;
-import jakarta.faces.annotation.ManagedProperty;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import ru.bardinpetr.itmo.lab3.app.auth.UserSession;
 import ru.bardinpetr.itmo.lab3.app.check.AreaPolygonController;
 import ru.bardinpetr.itmo.lab3.data.dao.impl.UserDAO;
 import ru.bardinpetr.itmo.lab3.data.models.PointResult;
-import ru.bardinpetr.itmo.lab3.data.models.User;
 
 import java.io.Serializable;
 import java.util.List;
@@ -28,15 +27,15 @@ public class PointRepository implements Serializable {
     private AreaPolygonController areaPolygonController;
 
     @Inject
-    @ManagedProperty("#{requestScope.user}")
-    private User user;
+    private UserSession session;
 
     /**
      * Retrieve points for user and area config
      * User and AreaConfig supplied from requestScope and AreaPolygonController accordingly
      */
     public List<PointResult> getCurrentPoints() {
-        var pts = userDAO.getPointResults(user.getId());
+        if (!session.isLoggedIn()) return List.of();
+        var pts = userDAO.getPointResults(session.getUser());
         return pts
                 .stream()
                 .filter(i -> i.getArea().equals(areaPolygonController.getAreaConfig()))
@@ -47,23 +46,27 @@ public class PointRepository implements Serializable {
      * Retrieve points for user
      */
     public List<PointResult> getAllPoints() {
-        return userDAO.getPointResults(user.getId());
+        if (!session.isLoggedIn()) return List.of();
+        return userDAO.getPointResults(session.getUser());
     }
 
     /**
      * Add PointResult to storage of user specified in requestScope
      */
     public void storePointResult(PointResult result) {
-        var current = userDAO.find(user.getId()).orElse(null);
-        if (current == null) return;
-        current.getPointResults().add(result);
-        userDAO.update(current);
+        if (!session.isLoggedIn()) return;
+
+        var user = session.getUser();
+        user.getPointResults().add(result);
+        userDAO.update(user);
     }
 
     /**
      * Remove all PointResult from storage of user specified in requestScope
      */
     public void removePoints() {
+        if (!session.isLoggedIn()) return;
+        var user = session.getUser();
         user.getPointResults().clear();
         userDAO.update(user);
     }

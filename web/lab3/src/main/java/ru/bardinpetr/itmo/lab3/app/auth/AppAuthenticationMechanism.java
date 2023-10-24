@@ -23,6 +23,9 @@ import java.util.Optional;
 @Slf4j
 public class AppAuthenticationMechanism implements HttpAuthenticationMechanism {
 
+    public static final String LOGIN_PAGE = "/views/login.xhtml";
+    public static final String START_PAGE = "/views/home.xhtml";
+
     @Inject
     private IdentityStoreHandler identityStoreHandler;
     @Inject
@@ -35,7 +38,7 @@ public class AppAuthenticationMechanism implements HttpAuthenticationMechanism {
     public AuthenticationStatus validateRequest(HttpServletRequest req, HttpServletResponse res, HttpMessageContext ctx) {
         var upCred = getLoginCredentials(req, res, ctx);
         if (upCred.isPresent()) {
-            log.info("Auth by user/pass");
+            log.info("Auth by user/pass for {}", req.getServletPath());
 
             var valid = identityStoreHandler.validate(upCred.get());
             if (valid.getStatus() != CredentialValidationResult.Status.VALID)
@@ -45,20 +48,27 @@ public class AppAuthenticationMechanism implements HttpAuthenticationMechanism {
             return ctx.notifyContainerAboutLogin(valid);
         }
 
-//        var jwtCred = getJWTCredentials(req, res, ctx);
-//        if (jwtCred.isPresent()) {
-//            log.info("Auth by JWT");
-//
-//            var valid = identityStoreHandler.validate(jwtCred.get());
-//            if (valid.getStatus() != CredentialValidationResult.Status.VALID)
-//                return responseToLogin(req, res, ctx);
-//
-//            issueToken(res, valid);
-//            return ctx.notifyContainerAboutLogin(valid);
-//        }
+        var jwtCred = getJWTCredentials(req, res, ctx);
+        if (jwtCred.isPresent()) {
+            log.debug("Auth by JWT for {}", req.getServletPath());
+
+            var valid = identityStoreHandler.validate(jwtCred.get());
+            if (valid.getStatus() != CredentialValidationResult.Status.VALID)
+                return redirectToLogin(req, res, ctx);
+
+            var status = ctx.notifyContainerAboutLogin(valid);
+
+            if (req.getServletPath().startsWith(LOGIN_PAGE))
+                return ctx.redirect(req.getContextPath() + START_PAGE);
+
+            return status;
+        }
+
+        if (ctx.getCallerPrincipal() != null)
+            return ctx.doNothing();
 
         if (ctx.isProtected())
-            return responseToLogin(req, res, ctx);
+            return redirectToLogin(req, res, ctx);
 
         return ctx.doNothing();
     }
@@ -75,21 +85,25 @@ public class AppAuthenticationMechanism implements HttpAuthenticationMechanism {
                 result.getCallerGroups(),
                 JWTType.ACCESS
         );
+        log.info("Issued token for {}", jwtPrincipal.getName());
         cookieService.inject(response, jwtIssueService.issue(jwtPrincipal));
     }
 
-    private AuthenticationStatus responseToLogin(HttpServletRequest req, HttpServletResponse res, HttpMessageContext ctx) {
+    private AuthenticationStatus redirectToLogin(HttpServletRequest req, HttpServletResponse res, HttpMessageContext ctx) {
+        log.info("Sent redirect to login");
         cleanSubject(req, res, ctx);
-        return ctx.forward("views/login.xhtml");
+        return ctx.redirect("/app" + LOGIN_PAGE);
     }
 
     private AuthenticationStatus responseUnauthorized(HttpServletRequest req, HttpServletResponse res, HttpMessageContext ctx) {
+        log.info("Sent unauthorized response to {}", req.getRequestURL());
         cleanSubject(req, res, ctx);
         return ctx.responseUnauthorized();
     }
 
     @Override
     public void cleanSubject(HttpServletRequest req, HttpServletResponse res, HttpMessageContext ctx) {
+        log.info("Clearing session {}", req.getUserPrincipal());
         cookieService.clear(res);
         HttpAuthenticationMechanism.super.cleanSubject(req, res, ctx);
     }

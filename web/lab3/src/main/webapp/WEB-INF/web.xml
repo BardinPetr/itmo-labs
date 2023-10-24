@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
-         version="6.0">
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+		 version="6.0">
 	<module-name>app</module-name>
 
 	<servlet>
@@ -16,17 +16,25 @@
 		<url-pattern>*.xhtml</url-pattern>
 	</servlet-mapping>
 
-<!--	<security-constraint>-->
-<!--		<web-resource-collection>-->
-<!--			<web-resource-name>auth_pages</web-resource-name>-->
-<!--			<url-pattern>/views/login.xhtml</url-pattern>-->
-<!--		</web-resource-collection>-->
-<!--		<auth-constraint>-->
-<!--			<-->
-<!--		</auth-constraint>-->
-<!--	</security-constraint>-->
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>user_zone</web-resource-name>
+			<url-pattern>/views/points.xhtml</url-pattern>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>user</role-name>
+			<role-name>admin</role-name>
+		</auth-constraint>
+	</security-constraint>
 
-	
+	<security-role>
+		<role-name>user</role-name>
+	</security-role>
+
+	<security-role>
+		<role-name>admin</role-name>
+	</security-role>
+
 	<context-param>
 		<param-name>primefaces.THEME</param-name>
 		<param-value>saga</param-value>

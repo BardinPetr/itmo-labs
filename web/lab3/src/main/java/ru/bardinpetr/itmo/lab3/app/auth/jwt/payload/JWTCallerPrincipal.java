@@ -6,6 +6,7 @@ import ru.bardinpetr.itmo.lab3.app.auth.jwt.models.JWTType;
 
 import java.util.Set;
 
+
 public class JWTCallerPrincipal extends CallerPrincipal {
     @Getter
     private final Set<String> groups;

@@ -11,13 +11,8 @@
 	<navigation-rule>
 		<from-view-id>/views/login.xhtml</from-view-id>
 		<navigation-case>
-			<from-outcome>#{navigation.toHome()}</from-outcome>
+			<from-outcome>home</from-outcome>
 			<to-view-id>/views/home.xhtml</to-view-id>
-			<redirect/>
-		</navigation-case>
-		<navigation-case>
-			<from-outcome>LOGIN_FAIL</from-outcome>
-			<to-view-id>/views/login.xhtml</to-view-id>
 			<redirect/>
 		</navigation-case>
 	</navigation-rule>
@@ -25,12 +20,12 @@
 	<navigation-rule>
 		<from-view-id>/views/home.xhtml</from-view-id>
 		<navigation-case>
-			<from-outcome>#{navigation.toPoints()}</from-outcome>
+			<from-outcome>points</from-outcome>
 			<to-view-id>/views/points.xhtml</to-view-id>
 			<redirect/>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>LOGOUT</from-outcome>
+			<from-outcome>login</from-outcome>
 			<to-view-id>/views/login.xhtml</to-view-id>
 			<redirect/>
 		</navigation-case>
@@ -39,12 +34,12 @@
 	<navigation-rule>
 		<from-view-id>/views/points.xhtml</from-view-id>
 		<navigation-case>
-			<from-outcome>#{navigation.toHome()}</from-outcome>
+			<from-outcome>home</from-outcome>
 			<to-view-id>/views/home.xhtml</to-view-id>
 			<redirect/>
 		</navigation-case>
 		<navigation-case>
-			<from-outcome>LOGOUT</from-outcome>
+			<from-outcome>login</from-outcome>
 			<to-view-id>/views/login.xhtml</to-view-id>
 			<redirect/>
 		</navigation-case>
