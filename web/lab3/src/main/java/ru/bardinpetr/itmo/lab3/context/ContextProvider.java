@@ -1,6 +1,7 @@
 package ru.bardinpetr.itmo.lab3.context;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.ExternalContext;
 import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
@@ -25,5 +26,9 @@ public class ContextProvider {
 
     public HttpServletResponse getResponse() {
         return (HttpServletResponse) externalContext.getResponse();
+    }
+
+    public void sendMessage(FacesMessage.Severity severity, String message) {
+        context.addMessage(null, new FacesMessage(severity, message, message));
     }
 }

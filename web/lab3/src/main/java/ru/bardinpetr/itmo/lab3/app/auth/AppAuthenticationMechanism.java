@@ -42,7 +42,7 @@ public class AppAuthenticationMechanism implements HttpAuthenticationMechanism {
 
             var valid = identityStoreHandler.validate(upCred.get());
             if (valid.getStatus() != CredentialValidationResult.Status.VALID)
-                return responseUnauthorized(req, res, ctx);
+                return ctx.doNothing();
 
             issueToken(res, valid);
             return ctx.notifyContainerAboutLogin(valid);

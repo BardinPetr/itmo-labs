@@ -2,12 +2,15 @@ package ru.bardinpetr.itmo.lab3.app.auth;
 
 
 import jakarta.enterprise.context.RequestScoped;
+import jakarta.faces.application.FacesMessage;
+import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.security.enterprise.credential.Password;
 import jakarta.security.enterprise.credential.UsernamePasswordCredential;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import ru.bardinpetr.itmo.lab3.app.auth.db.utils.PasswordService;
@@ -36,11 +39,11 @@ public class LoginBean {
     @Inject
     private Validator validator;
 
-    @NotNull
-//    @Email
+    @NotNull(message = "Login should be provided")
+    @Size(min = 3, message = "Login should be at last 3 characters")
     private String username;
-    @NotNull
-//    @Size(min = 8, message = "Password should be at last 8 characters")
+    @NotNull(message = "Password should be provided")
+    @Size(min = 8, message = "Password should be at last 8 characters")
     private String password;
 
     public String doLogin() {
@@ -60,13 +63,12 @@ public class LoginBean {
         log.info("User {} login status {}", username, status);
 
         if (status.equals(SUCCESS)) {
+            contextReq.getContext().responseComplete();
             return navigation.toHome();
         } else if (status.equals(SEND_FAILURE)) {
-            // TODO inform user
+            contextReq.sendMessage(FacesMessage.SEVERITY_ERROR, "Invalid username/password");
             log.error("User {} authentication failed", username);
         }
-
-        contextReq.getContext().responseComplete();
         return null;
     }
 
