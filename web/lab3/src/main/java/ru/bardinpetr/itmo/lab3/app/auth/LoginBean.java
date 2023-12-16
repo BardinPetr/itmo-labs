@@ -3,7 +3,6 @@ package ru.bardinpetr.itmo.lab3.app.auth;
 
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.faces.application.FacesMessage;
-import jakarta.faces.context.FacesContext;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 import jakarta.security.enterprise.credential.Password;
@@ -38,6 +37,8 @@ public class LoginBean {
     private PasswordService passwordService;
     @Inject
     private Validator validator;
+    @Inject
+    private UserSession session;
 
     @NotNull(message = "Login should be provided")
     @Size(min = 3, message = "Login should be at last 3 characters")
@@ -47,6 +48,8 @@ public class LoginBean {
     private String password;
 
     public String doLogin() {
+        checkLoggedInUser();
+
         log.info("Started login authentication for {}", username);
 
         var cred = asCredential();
@@ -73,6 +76,8 @@ public class LoginBean {
     }
 
     public String doRegister() {
+        checkLoggedInUser();
+
         log.info("Registering user {}", username);
 
         if (userDAO.findByLogin(username).isPresent()) {
@@ -94,6 +99,10 @@ public class LoginBean {
         }
 
         return doLogin();
+    }
+
+    private void checkLoggedInUser() {
+        session.doLogout();
     }
 
     protected UsernamePasswordCredential asCredential() {

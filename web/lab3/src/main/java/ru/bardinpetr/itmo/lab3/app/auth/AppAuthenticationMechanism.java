@@ -37,6 +37,8 @@ public class AppAuthenticationMechanism implements HttpAuthenticationMechanism {
     @Override
     public AuthenticationStatus validateRequest(HttpServletRequest req, HttpServletResponse res, HttpMessageContext ctx) {
         var upCred = getLoginCredentials(req, res, ctx);
+        var jwtCred = getJWTCredentials(req, res, ctx);
+
         if (upCred.isPresent()) {
             log.info("Auth by user/pass for {}", req.getServletPath());
 
@@ -48,7 +50,6 @@ public class AppAuthenticationMechanism implements HttpAuthenticationMechanism {
             return ctx.notifyContainerAboutLogin(valid);
         }
 
-        var jwtCred = getJWTCredentials(req, res, ctx);
         if (jwtCred.isPresent()) {
             log.debug("Auth by JWT for {}", req.getServletPath());
 
@@ -56,12 +57,7 @@ public class AppAuthenticationMechanism implements HttpAuthenticationMechanism {
             if (valid.getStatus() != CredentialValidationResult.Status.VALID)
                 return redirectToLogin(req, res, ctx);
 
-            var status = ctx.notifyContainerAboutLogin(valid);
-
-            if (req.getServletPath().startsWith(LOGIN_PAGE))
-                return ctx.redirect(req.getContextPath() + START_PAGE);
-
-            return status;
+            return ctx.notifyContainerAboutLogin(valid);
         }
 
         if (ctx.getCallerPrincipal() != null)
