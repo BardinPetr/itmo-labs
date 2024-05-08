@@ -58,7 +58,7 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:${junit_ver}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${junit_ver}"
     testImplementation "org.junit.jupiter:junit-jupiter:${junit_ver}"
-
+    testImplementation 'org.assertj:assertj-core:3.4.1'
     // testcontainers
     testImplementation "org.testcontainers:testcontainers:1.19.1"
     testImplementation "org.testcontainers:junit-jupiter:1.19.1"
@@ -81,11 +81,6 @@ dependencies {
     testImplementation "org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-bom:${shrinkwrap_ver}"
     testImplementation "org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-gradle-depchain:${shrinkwrap_ver}"
     testImplementation "org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-depchain:${shrinkwrap_ver}"
-//    testImplementation "org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api-gradle-embedded-archive:${shrinkwrap_ver}"
-//    testImplementation "org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-gradle-embedded-archive:${shrinkwrap_ver}"
-//    testImplementation "org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-impl-maven:${shrinkwrap_ver}"
-//    testImplementation "org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-spi:${shrinkwrap_ver}"
-//    testImplementation "org.jboss.shrinkwrap.resolver:shrinkwrap-resolver-api:${shrinkwrap_ver}"
     implementation "org.gradle:gradle-tooling-api:7.3-20210825160000+0000" // because shrinkwrap has old gradle api
     testImplementation "org.dbunit:dbunit:2.7.3"
 }

@@ -65,4 +65,9 @@ public class UserDAO extends DAO<Long, User> implements Serializable {
         user.getRoles().add(roleDAO.instance(roleName));
         update(user);
     }
+
+    public void addPointResult(User user, PointResult result) {
+        user.getPointResults().add(result);
+        update(user);
+    }
 }
