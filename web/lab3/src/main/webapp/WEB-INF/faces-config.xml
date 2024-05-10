@@ -6,6 +6,10 @@
 
 	<application>
 		<message-bundle>lab3</message-bundle>
+		<resource-bundle>
+			<base-name>ru.bardinpetr.itmo.lab3.messages</base-name>
+			<var>msg</var>
+		</resource-bundle>
 	</application>
 
 	<navigation-rule>

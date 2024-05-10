@@ -5,23 +5,24 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui" xmlns:h="http://java.sun.com/jsf/html"
 >
+<f:loadBundle basename="ru.bardinpetr.itmo.lab3.messages" var="msg"/>
 <ui:composition>
     <h:form id="nav">
         <div class="card">
             <p:menubar>
                 <p:menuitem
-                        value="Home"
+                        value="#{msg.home}"
                         outcome="#{navigation.toHome()}"
                         icon="pi pi-fw pi-home"
                 />
                 <p:menuitem
-                        value="Points"
+                        value="#{msg.points}"
                         outcome="#{navigation.toPoints()}"
                         icon="pi pi-fw pi-map-marker"
                         disabled="#{!userSession.loggedIn}"
                 />
                 <p:menuitem
-                        value="Logout"
+                        value="#{msg.logout}"
                         rendered="#{userSession.loggedIn}"
                         action="#{userSession.doLogout}"
                         ajax="false"
@@ -29,7 +30,7 @@
                         styleClass="ui-button-info"
                 />
                 <p:menuitem
-                        value="Login"
+                        value="#{msg.login}"
                         rendered="#{!userSession.loggedIn}"
                         outcome="#{navigation.toLogin()}"
                         icon="pi pi-fw pi-sign-out"
