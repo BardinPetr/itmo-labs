@@ -14,7 +14,7 @@ abstract class MusicTask extends DefaultTask {
             var res = project.exec {
                 commandLine 'mpg123', '-q', music.path
             }
-            if (res.exitValue != 0) return
+            if (res.exitValue == 0) return
         } catch (Exception ignored) {
         }
         print("\n\nDING!!!\n\n")

@@ -3,6 +3,7 @@ import org.gradle.api.GradleException
 import org.gradle.api.file.Directory
 import org.gradle.api.tasks.TaskAction
 
+import java.nio.file.CopyOption
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -14,10 +15,13 @@ abstract class TeamTask extends DefaultTask {
         if (rev < 2)
             throw new GradleException("Not enough revisions")
 
-        def destDir = project.layout.buildDirectory.dir("team").get()
+        def buildDir = project.layout.buildDirectory.get()
+        buildDir.asFile.mkdir()
+        def destDir = buildDir.dir("team")
+        destDir.asFile.deleteDir()
         destDir.asFile.mkdir()
 
-        for (def i : [rev - 2, rev - 1])
+        for (def i : [rev - 1, rev])
             compile(destDir, repoURL, i)
     }
 
@@ -28,7 +32,7 @@ abstract class TeamTask extends DefaultTask {
         call("svn", "checkout", "-r", rev.toString(), repo, tempDir.path)
 
         def res = project.exec {
-            commandLine "./gradlew", "war"
+            commandLine "./gradlew", "war", "-PjavaDir=${project.javaDir}"
             workingDir tempDir
         }
         if (res.exitValue != 0)
@@ -42,7 +46,7 @@ abstract class TeamTask extends DefaultTask {
         Files.copy(Path.of(war.path), Path.of("${outDir}/r${rev}.war"))
 
         println("Clearing revision r${rev}")
-        tempDir.deleteDir()
+        tempDir.deleteOnExit()
     }
 
     private int getCurrentRevision() {

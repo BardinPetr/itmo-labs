@@ -32,7 +32,7 @@ abstract class JavadocTask extends DefaultTask {
             commandLine = [
                     'javadoc',
                     *arguments.getOrElse([]),
-                    '-d', buildDir,
+                    '-d', buildDir.get(),
                     '-sourcepath', sourceDir,
                     '-cp', classpath.getOrElse(""),
                     *javaFiles

@@ -28,22 +28,23 @@ abstract class JUnitTask extends DefaultTask {
 
     @TaskAction
     void run() {
-        def junitJar = configuration.get().find { it.name.contains("junit-platform-console-standalone") }
-        if (junitJar == null)
-            throw new GradleException("JAR for junit-platform-console-standalone not found")
-
-        project.exec {
-            commandLine = [
-                    'java',
-                    '-jar', junitJar,
-                    *arguments.getOrElse([]),
-                    '-cp', configuration.get().asPath,
-                    '-cp', testClassesDir.get(),
-                    '-cp', sourceClassesDir.get(),
-                    '--reports-dir', reportDir.get(),
-                    '--scan-class-path'
-            ]
-        }
+        println("!!!")
+//        def junitJar = configuration.get().find { it.name.contains("junit-platform-console-standalone") }
+//        if (junitJar == null)
+//            throw new GradleException("JAR for junit-platform-console-standalone not found")
+//
+//        project.exec {
+//            commandLine = [
+//                    'java',
+//                    '-jar', junitJar,
+//                    *arguments.getOrElse([]),
+//                    '-cp', configuration.get().asPath,
+//                    '-cp', testClassesDir.get(),
+//                    '-cp', sourceClassesDir.get(),
+//                    '--reports-dir', reportDir.get(),
+//                    '--scan-class-path'
+//            ]
+//        }
     }
 }
 
