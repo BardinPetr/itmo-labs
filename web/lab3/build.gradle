@@ -34,7 +34,6 @@ configurations {
     testLib {
         extendsFrom configurations.javaLib
     }
-    testRuntime
 }
 
 dependencies {
@@ -66,10 +65,7 @@ dependencies {
     // Tests
     testLib "org.junit.jupiter:junit-jupiter-api:${junit_ver}"
     testLib "org.junit.jupiter:junit-jupiter-engine:${junit_ver}"
-//    testLib "org.junit.jupiter:junit-jupiter:${junit_ver}"
     testLib 'org.assertj:assertj-core:3.4.1'
-
-//    testRuntime 'org.junit.platform:junit-platform-console-standalone:1.11.0-M1'
 }
 
 tasks.register('clean', Delete) {
@@ -142,7 +138,9 @@ tasks.register('createManifest') {
         project.mkdir("${buildDir}/tmp/META-INF/")
 
         file("${buildDir}/tmp/META-INF/MANIFEST.MF")
-                .text = "Manifest-Version: 1.0\n\n${hashes}\n"
+                .text = "Manifest-Version: 1.0\n" +
+                "Implementation-Version: ${version}\n\n" +
+                "${hashes}\n"
     }
 }
 
@@ -167,9 +165,9 @@ tasks.register("music", MusicTask) {
 }
 
 tasks.register("javadocCompile", JavadocTask) {
-    classpath = configurations.javaLib.asPath
+    classpath = (configurations.javaLib + configurations.testLib).asPath
     buildDir = javadocDir
-    sourceDir = layout.projectDirectory.dir("src/main")
+    sourceDir = layout.projectDirectory.dir("src")
     arguments = ['-quiet', '-Xdoclint:-missing']
 }
 
@@ -181,21 +179,21 @@ tasks.register("javadocZip", Zip) {
     destinationDirectory = layout.buildDirectory.get()
 }
 
-//tasks.register("tst", JUnitTask) {
-//    dependsOn("compileTest")
-//
-//    configuration = configurations.testLib
-//    sourceClassesDir = mainClassesDir
-//    testClassesDir = testClassesDir
-//    reportDir = layout.buildDirectory.dir("report").get()
-//}
+tasks.register("test", JUnitTask) {
+    dependsOn("compileTest")
 
-//tasks.register("report", ReportPusherTask) {
-//    dependsOn("tst")
-//
-//    reportBuildDirectory = layout.buildDirectory.dir('report')
-//    reportStoreDirectory = layout.projectDirectory.dir('reports')
-//}
+    testConfiguration = configurations.testLib
+    sourceClasses = mainClassesDir
+    testClasses = testClassesDir
+    reportDir = layout.buildDirectory.dir("report").get()
+}
+
+tasks.register("report", ReportPusherTask) {
+    dependsOn("test")
+
+    reportBuildDirectory = layout.buildDirectory.dir('report')
+    reportStoreDirectory = layout.projectDirectory.dir('reports')
+}
 
 tasks.register("teamsrc", TeamTask)
 

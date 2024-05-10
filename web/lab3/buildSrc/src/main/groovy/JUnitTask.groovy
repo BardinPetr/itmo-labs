@@ -1,5 +1,4 @@
 import org.gradle.api.DefaultTask
-import org.gradle.api.GradleException
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.ListProperty
@@ -15,36 +14,44 @@ abstract class JUnitTask extends DefaultTask {
     abstract ListProperty<String> getArguments()
 
     @Input
-    abstract Property<Configuration> getConfiguration()
+    abstract Property<Configuration> getTestConfiguration()
 
     @InputDirectory
-    abstract DirectoryProperty getSourceClassesDir()
+    abstract DirectoryProperty getSourceClasses()
 
     @InputDirectory
-    abstract DirectoryProperty getTestClassesDir()
+    abstract DirectoryProperty getTestClasses()
 
     @OutputDirectory
     abstract DirectoryProperty getReportDir()
 
     @TaskAction
     void run() {
-        println("!!!")
-//        def junitJar = configuration.get().find { it.name.contains("junit-platform-console-standalone") }
-//        if (junitJar == null)
-//            throw new GradleException("JAR for junit-platform-console-standalone not found")
-//
-//        project.exec {
-//            commandLine = [
-//                    'java',
-//                    '-jar', junitJar,
-//                    *arguments.getOrElse([]),
-//                    '-cp', configuration.get().asPath,
-//                    '-cp', testClassesDir.get(),
-//                    '-cp', sourceClassesDir.get(),
-//                    '--reports-dir', reportDir.get(),
-//                    '--scan-class-path'
-//            ]
-//        }
+        def junitJar = getTesterJar()
+
+        project.exec {
+            commandLine = [
+                    "${project.javaDir}/bin/java",
+                    '-jar', junitJar,
+                    *arguments.getOrElse([]),
+                    '-cp', testConfiguration.get().asPath,
+                    '-cp', testClasses.get(),
+                    '-cp', sourceClasses.get(),
+                    '--reports-dir', reportDir.get(),
+                    '--scan-class-path'
+            ]
+        }
+    }
+
+    private File getTesterJar() {
+        def jarURL = 'https://repo1.maven.org/maven2/org/junit/platform/junit-platform-console-standalone/1.11.0-M1/junit-platform-console-standalone-1.11.0-M1.jar'
+        def jar = project.layout.buildDirectory.file('junit.jar').get().asFile
+        if (!jar.exists()) {
+            project.exec {
+                commandLine 'wget', '-O', jar.path, jarURL
+            }
+        }
+        return jar
     }
 }
 
