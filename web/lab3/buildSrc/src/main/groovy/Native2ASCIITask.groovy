@@ -14,7 +14,7 @@ abstract class Native2ASCIITask extends DefaultTask {
     @TaskAction
     void convert() {
         inputDir.getAsFileTree()
-                .matching { include '**/messages.properties' }
+                .matching { include '**/*.properties' }
                 .forEach {
                     it.text = it.text
                             .codePoints()

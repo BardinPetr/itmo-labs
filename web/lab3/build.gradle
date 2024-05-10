@@ -15,6 +15,7 @@ repositories {
 
 ext {
     junit_ver = "5.9.1"
+
 }
 
 sourceCompatibility = "17"
@@ -22,6 +23,12 @@ targetCompatibility = "17"
 
 tasks.withType(JavaCompile) {
     options.encoding = "UTF-8"
+}
+
+configurations {
+    tst {
+        extendsFrom configurations.runtimeClasspath
+    }
 }
 
 dependencies {
@@ -55,6 +62,8 @@ dependencies {
     implementation "org.junit.jupiter:junit-jupiter-engine:${junit_ver}"
     implementation "org.junit.jupiter:junit-jupiter:${junit_ver}"
     implementation 'org.assertj:assertj-core:3.4.1'
+
+    tst 'org.junit.platform:junit-platform-console-standalone:1.11.0-M1'
 }
 
 wildfly {
@@ -80,5 +89,45 @@ war {
 }
 
 tasks.register("native2ascii", Native2ASCIITask) {
+//    dependsOn("")
+
     inputDir = layout.buildDirectory.dir("resources")
+}
+
+tasks.register("music", MusicTask) {
+    dependsOn("build")
+
+    music = file("buildSrc/src/main/resources/ding.mp3")
+}
+
+tasks.register("jd", JavadocTask) {
+    classpath = configurations.runtimeClasspath.asPath
+    buildDir = layout.buildDirectory.dir("docs").get()
+    sourceDir = layout.projectDirectory.dir("src")
+    arguments = ['-quiet', '-Xdoclint:-missing']
+}
+
+tasks.register("tst", JUnitTask) {
+    configuration = configurations.tst
+    sourceClassesDir = layout.buildDirectory.dir('classes/java/main').get()
+    testClassesDir = layout.buildDirectory.dir('classes/java/test').get()
+    reportDir = layout.buildDirectory.dir("report").get()
+
+    dependsOn("classes", "testClasses")
+}
+
+tasks.register("manifestChecksums") {
+    dependsOn("classes")
+
+    def classesDir = layout.buildDirectory.dir('classes/java/main').get()
+
+    def hashes = HashHelper.generateManifestHashes(classesDir)
+    println(hashes)
+}
+
+tasks.register("report", ReportPusherTask) {
+    dependsOn("tst")
+
+    reportBuildDirectory = layout.buildDirectory.dir('report')
+    reportStoreDirectory = layout.projectDirectory.dir('reports')
 }
