@@ -131,3 +131,6 @@ tasks.register("report", ReportPusherTask) {
     reportBuildDirectory = layout.buildDirectory.dir('report')
     reportStoreDirectory = layout.projectDirectory.dir('reports')
 }
+
+tasks.register("team", TeamTask) {
+}
