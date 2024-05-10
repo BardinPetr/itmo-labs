@@ -5,6 +5,8 @@ import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 
+import java.time.LocalDateTime
+
 abstract class ReportPusherTask extends DefaultTask {
 
     @InputDirectory
@@ -29,12 +31,15 @@ abstract class ReportPusherTask extends DefaultTask {
 
         reportOutput.text = report[0].text
 
-//        project.exec {
-//            commandLine "svn", "add", "--force", reportOutput.path
-//        }
-//        project.exec {
-//            commandLine "svn", "commit", "-m", "Test report"
-//        }
+        project.exec {
+            commandLine "svn", "add", "--parents", "--force", reportOutput.path
+        }
+        project.exec {
+            commandLine "svn", "commit", "-m", "Test report at ${LocalDateTime.now().dateTimeString}"
+        }
+        project.exec {
+            commandLine "svn", "update"
+        }
     }
 }
 
